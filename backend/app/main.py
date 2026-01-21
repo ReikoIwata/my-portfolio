@@ -1,17 +1,24 @@
-from fastapi import FastAPI
-import os
+from fastapi import FastAPI, Depends
+from sqlalchemy.orm import Session
+from .database import engine, Base, get_db
+from . import models
+
+# 起動時にDBテーブルを自動生成
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
 @app.get("/")
 def read_root():
-    # .env から渡された環境変数が取得できるかテスト
-    db_url = os.getenv("DATABASE_URL")
     return {
-        "message": "Hello World from FastAPI💕🌈",
-        "database_status": "URL is set" if db_url else "URL is missing"
+        "message": "Database connected👌💕🌈",
     }
 
-@app.get("/health")
-def health_check():
-    return {"status": "ok💕✨"}
+# プロフィールを取得するAPIのサンプル
+@app.get("/profile")
+def get_profile(db: Session = Depends(get_db)):
+    # 最初の1件を取得（まだデータがない場合はNoneが返る）
+    profile = db.query(models.Profile).first()
+    if profile:
+        return profile
+    return {"message": "No profile data yet💀."}
