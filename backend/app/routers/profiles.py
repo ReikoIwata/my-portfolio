@@ -1,0 +1,36 @@
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+from ..database import get_db
+from .. import models, schemas
+
+router = APIRouter(
+    prefix="/profile",
+    tags=["profile"]
+)
+
+# 公開API：プロフィール取得
+@router.get("/", response_model=schemas.ProfileResponse)
+def get_profile(db: Session = Depends(get_db)):
+    profile = db.query(models.Profile).first()
+    if not profile:
+        # データがない場合は404を返すと親切です
+        raise HTTPException(status_code=404, detail="Profile not found")
+    return profile
+
+# 管理者API：プロフィール作成・更新　※後から認証を追加
+@router.post("/", response_model=schemas.ProfileResponse)
+def create_or_update_profile(profile_data: schemas.ProfileCreate, db: Session = Depends(get_db)):
+    db_profile = db.query(models.Profile).first()
+    
+    if db_profile:
+        # 更新処理
+        for key, value in profile_data.model_dump().items():
+            setattr(db_profile, key, value)
+    else:
+        # 新規作成処理
+        db_profile = models.Profile(**profile_data.model_dump())
+        db.add(db_profile)
+    
+    db.commit()
+    db.refresh(db_profile)
+    return db_profile
