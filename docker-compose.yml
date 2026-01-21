@@ -24,4 +24,4 @@ services:
       - db
 
 volumes:
-  - ./backend:/app  # backendフォルダ全体をコンテナの/appに同期
+  postgres_data:
