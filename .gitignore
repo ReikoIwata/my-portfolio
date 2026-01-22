@@ -1,3 +1,6 @@
 .env
 __pycache__/
 *.pyc
+
+# backendフォルダの中にある特定のJSONファイルを無視
+backend/my-portfolio-e3730-0c5402706721.json
