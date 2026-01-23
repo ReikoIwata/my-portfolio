@@ -22,7 +22,7 @@ export default function Home() {
   return (
     <main className="p-8">
       <h1 className="text-2xl font-bold mb-6">
-        ReikoIwata's Portfolio 管理者ログイン
+        ReikoIwata&apos;s Portfolio 管理者ログイン
       </h1>
       <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100 inline-block">
         <p className="mb-4 text-gray-600">
