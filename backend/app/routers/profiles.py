@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from ..database import get_db
 from .. import models, schemas
+from ..auth import get_current_user
 
 router = APIRouter(
     prefix="/profile",
@@ -17,11 +18,15 @@ def get_profile(db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Profile not found")
     return profile
 
-# 管理者API：プロフィール作成・更新　※後から認証を追加
+# 管理者API：プロフィール作成・更新
 @router.post("/", response_model=schemas.ProfileResponse)
-def create_or_update_profile(profile_data: schemas.ProfileCreate, db: Session = Depends(get_db)):
-    db_profile = db.query(models.Profile).first()
-    
+def create_or_update_profile(
+    profile_data: schemas.ProfileCreate, 
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
+):
+
+    print(f"Validated user: {current_user['email']}")
     if db_profile:
         # 更新処理
         for key, value in profile_data.model_dump().items():
