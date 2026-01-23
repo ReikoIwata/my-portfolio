@@ -22,3 +22,21 @@ export const skillSchema = z.object({
 });
 
 export type SkillInput = z.infer<typeof skillSchema>;
+
+export const profileSchema = z.object({
+  fullName: z.string().min(1, "名前は必須です"),
+  bio: z.string().max(500, "自己紹介は500文字以内で入力してください"),
+  title: z.string().min(1, "肩書き（職業など）は必須です"),
+  githubUrl: z
+    .string()
+    .url("有効なURLを入力してください")
+    .optional()
+    .or(z.literal("")),
+  twitterUrl: z
+    .string()
+    .url("有効なURLを入力してください")
+    .optional()
+    .or(z.literal("")),
+});
+
+export type ProfileFormData = z.infer<typeof profileSchema>;
