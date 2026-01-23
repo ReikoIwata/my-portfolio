@@ -9,6 +9,7 @@ app = FastAPI()
 
 # プロフィールのルーターを登録
 app.include_router(profiles.router)
+app.include_router(skills.router)
 
 @app.get("/")
 def read_root():
@@ -16,5 +17,3 @@ def read_root():
         "message": "Welcome to my portfolio API👌💕🌈",
     }
 
-app.include_router(profiles.router)
-app.include_router(skills.router)
