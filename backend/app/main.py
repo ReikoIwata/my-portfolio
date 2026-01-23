@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from .database import engine, Base
-from .routers import profiles
+from .routers import profiles, skills
 
 # 起動時にDBテーブルを自動生成
 Base.metadata.create_all(bind=engine)
@@ -15,3 +15,6 @@ def read_root():
     return {
         "message": "Welcome to my portfolio API👌💕🌈",
     }
+
+app.include_router(profiles.router)
+app.include_router(skills.router)
