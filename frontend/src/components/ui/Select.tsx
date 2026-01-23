@@ -1,24 +1,17 @@
 "use client";
+import { forwardRef } from "react";
 
 type SelectProps = React.SelectHTMLAttributes<HTMLSelectElement> & {
   label?: string;
   options: { value: string; label: string }[];
 };
 
-export default function Select({
-  label,
-  options,
-  className = "",
-  ...props
-}: SelectProps) {
-  return (
+export const Select = forwardRef<HTMLSelectElement, SelectProps>(
+  ({ label, options, className = "", ...props }, ref) => (
     <div className="w-full">
-      {label && (
-        <label className="block text-sm font-bold mb-1 text-gray-700">
-          {label}
-        </label>
-      )}
+      {label && <label className="block text-sm font-bold mb-1">{label}</label>}
       <select
+        ref={ref}
         {...props}
         className={`w-full p-2 border rounded bg-white focus:ring-2 focus:ring-blue-500 outline-none ${className}`}
       >
@@ -29,5 +22,6 @@ export default function Select({
         ))}
       </select>
     </div>
-  );
-}
+  ),
+);
+Select.displayName = "Select";

@@ -5,7 +5,8 @@ type ButtonProps = {
   onClick?: () => void;
   type?: "button" | "submit";
   variant?: "primary" | "danger" | "outline"; // 色のパターン
-  className?: string; // 追加のスタイリング用
+  className?: string;
+  disabled?: boolean;
 };
 
 export default function Button({
@@ -14,6 +15,7 @@ export default function Button({
   type = "button",
   variant = "primary",
   className = "",
+  disabled = false,
 }: ButtonProps) {
   // 基本の形（共通スタイル）
   const baseStyle =
@@ -21,10 +23,13 @@ export default function Button({
 
   // バリアントごとの色設定
   const variants = {
-    primary: "bg-blue-600 text-white hover:bg-blue-700",
-    danger: "bg-rose-400 text-white hover:bg-rose-600",
+    primary: "bg-sky-400 text-white hover:bg-sky-300",
+    danger: "bg-rose-400 text-white hover:bg-rose-300",
     outline: "border border-gray-300 text-gray-700 hover:bg-gray-50",
   };
+
+  //  無効化時のスタイル
+  const disabledStyle = "disabled:opacity-50 disabled:cursor-not-allowed";
 
   return (
     <button
