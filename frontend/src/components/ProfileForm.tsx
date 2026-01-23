@@ -46,7 +46,9 @@ export default function ProfileForm() {
           <p className="text-red-500 text-xs">{errors.bio.message}</p>
         )}
       </div>
-      <Button type="submit">更新する</Button>
+      <div className="flex justify-end">
+        <Button type="submit">更新する</Button>
+      </div>
     </form>
   );
 }

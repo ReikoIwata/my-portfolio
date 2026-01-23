@@ -4,6 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import SkillForm from "@/components/SkillForm";
+import ProfileForm from "@/components/ProfileForm";
 import { Button, Card } from "@/components/ui";
 import LogoutButton from "@/components/LogoutButton";
 
@@ -44,9 +45,9 @@ export default function AdminPage() {
 
         {/* 今後、ここに ProfileForm や ProjectForm を追加 */}
         <Card title="プロフィール編集">
-          <p className="text-gray-500 text-sm">
-            （ここに今後プロフィール用フォームを入れる）
-          </p>
+          <div className="text-gray-600">
+            <ProfileForm />
+          </div>
         </Card>
       </div>
     </main>

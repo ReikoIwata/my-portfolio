@@ -88,14 +88,11 @@ export default function SkillForm() {
         </div>
       </div>
 
-      <Button
-        type="submit"
-        variant="primary"
-        className="w-full"
-        disabled={isSubmitting}
-      >
-        {isSubmitting ? "送信中..." : "スキルを登録"}
-      </Button>
+      <div className="flex justify-end pt-2">
+        <Button type="submit" variant="primary">
+          {isSubmitting ? "送信中..." : "登録する"}
+        </Button>
+      </div>
     </form>
   );
 }
