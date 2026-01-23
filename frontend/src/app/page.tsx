@@ -1,20 +1,35 @@
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 import LoginButton from "@/components/LoginButton";
-import SkillForm from "@/components/SkillForm";
 
 export default function Home() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  // ログイン済みなら管理者ページへリダイレクト
+  useEffect(() => {
+    if (!loading && user) {
+      router.push("/admin");
+    }
+  }, [user, loading, router]);
+
+  if (loading) return <p className="p-8">🚪読み込み中...🚪</p>;
+  if (user) return null;
+
   return (
     <main className="p-8">
-      <h1 className="text-2xl font-bold mb-6">✨My Portfolio 管理者ページ✨</h1>
+      <h1 className="text-2xl font-bold mb-6">
+        ReikoIwata's Portfolio 管理者ログイン
+      </h1>
       <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100 inline-block">
         <p className="mb-4 text-gray-600">
           管理者はここからログインしてください
         </p>
         <LoginButton />
       </div>
-      <section className="mt-8">
-        <h2 className="text-xl font-semibold mb-4">新規スキル登録</h2>
-        <SkillForm />
-      </section>
     </main>
   );
 }

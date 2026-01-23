@@ -2,17 +2,16 @@
 
 import { useState } from "react";
 import { apiRequest } from "@/lib/api-client";
-import { useAuth } from "@/context/AuthContext";
-import Button from "./ui/Button";
+import { Button, Input, Select } from "@/components/ui";
 
 export default function SkillForm() {
-  const { user } = useAuth();
   const [name, setName] = useState("");
   const [category, setCategory] = useState("Backend");
-
-  // ログインしていない場合はメッセージを出す
-  if (!user)
-    return <p className="text-gray-500">ログインしてから登録してください✏✨</p>;
+  const CATEGORY_OPTIONS = [
+    { value: "Backend", label: "Backend" },
+    { value: "Frontend", label: "Frontend" },
+    { value: "Tool", label: "Tool" },
+  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,33 +35,21 @@ export default function SkillForm() {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-4 p-4 border rounded-lg bg-gray-50"
-    >
-      <div>
-        <label className="block text-sm font-bold">スキル名</label>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="w-full p-2 border rounded"
-          placeholder="例: Next.js"
-          required
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-bold">カテゴリ</label>
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="w-full p-2 border rounded"
-        >
-          <option value="Backend">Backend</option>
-          <option value="Frontend">Frontend</option>
-          <option value="Tool">Tool</option>
-        </select>
-      </div>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <Input
+        label="スキル名"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="例: Next.js"
+        required
+      />
+      <Select
+        label="カテゴリ"
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+        options={CATEGORY_OPTIONS}
+      />
+
       <Button type="submit" variant="primary" className="w-full">
         スキルを登録
       </Button>
