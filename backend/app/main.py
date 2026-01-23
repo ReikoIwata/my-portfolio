@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from .database import engine, Base
 from .routers import profiles, skills
 
@@ -7,7 +8,21 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-# プロフィールのルーターを登録
+# CORS設定
+origins = [
+    "http://localhost:3000", # Next.jsのURLを許可する
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# ルーターを登録
+app.include_router(skills.router)
 app.include_router(profiles.router)
 
 @app.get("/")
@@ -15,6 +30,3 @@ def read_root():
     return {
         "message": "Welcome to my portfolio API👌💕🌈",
     }
-
-app.include_router(profiles.router)
-app.include_router(skills.router)
