@@ -1,21 +1,16 @@
 "use client";
+import { forwardRef } from "react";
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
 };
 
-export default function Input({ label, className = "", ...props }: InputProps) {
-  return (
+export const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ label, className = "", ...props }, ref) => (
     <div className="w-full">
-      {label && (
-        <label className="block text-sm font-bold mb-1 text-gray-700">
-          {label}
-        </label>
-      )}
-      <input
-        {...props}
-        className={`w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none transition-all ${className}`}
-      />
+      {label && <label className="block text-sm font-bold mb-1">{label}</label>}
+      <input ref={ref} {...props} className={`... ${className}`} />
     </div>
-  );
-}
+  ),
+);
+Input.displayName = "Input";
