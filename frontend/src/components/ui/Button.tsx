@@ -21,8 +21,8 @@ export default function Button({
 
   // バリアントごとの色設定
   const variants = {
-    primary: "bg-blue-600 text-white hover:bg-blue-700",
-    danger: "bg-rose-400 text-white hover:bg-rose-600",
+    primary: "bg-sky-400 text-white hover:bg-sky-300",
+    danger: "bg-rose-400 text-white hover:bg-rose-300",
     outline: "border border-gray-300 text-gray-700 hover:bg-gray-50",
   };
 

@@ -18,31 +18,13 @@ export default function LoginButton() {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      console.log("ログアウト成功💕🌈✨");
-    } catch (error) {
-      console.error("ログアウトエラー:", error);
-    }
-  };
-
-  if (loading) return <p className="text-gray-500">Loading...</p>;
+  if (loading) return <p className="text-gray-500">Loading...✨</p>;
 
   return (
     <div className="flex items-center gap-4">
-      {user ? (
-        <>
-          <span className="text-sm font-medium">{user.displayName}さん</span>
-          <Button variant="danger" onClick={handleLogout}>
-            ログアウト
-          </Button>
-        </>
-      ) : (
-        <Button variant="danger" onClick={handleLogin}>
-          Googleでログイン
-        </Button>
-      )}
+      <Button variant="danger" onClick={handleLogin}>
+        Googleでログイン
+      </Button>
     </div>
   );
 }
