@@ -52,7 +52,7 @@ export default function Home() {
       {/* --- Projects セクション --- */}
       <section className="mb-20">
         <h2 className="text-2xl font-bold mb-8 flex items-center gap-2">
-          📁 Featured Projects
+          🌎 Featured Projects
         </h2>
         <ProjectList />
       </section>

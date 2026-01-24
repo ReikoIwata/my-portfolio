@@ -2,16 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { apiRequest } from "@/lib/api-client";
-import { Card } from "@/components/ui";
+import { Button, Card } from "@/components/ui";
 import { useAuth } from "@/context/AuthContext";
 import toast from "react-hot-toast";
 import { Skill } from "@/types";
 interface SkillListProps {
   onEdit?: (skill: Skill) => void;
-  refreshKey?: number;
+  isAdmin?: boolean; // 管理画面モードかどうか
 }
 
-export default function SkillList({ onEdit }: SkillListProps) {
+export default function SkillList({ onEdit, isAdmin }: SkillListProps) {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
@@ -62,25 +62,29 @@ export default function SkillList({ onEdit }: SkillListProps) {
               </span>
               <h3 className="text-lg font-bold mt-2">{skill.name}</h3>
             </div>
-            <div className="flex flex-col items-end gap-2">
-              <div className="text-yellow-500 font-bold">
+            <div className="flex flex-col items-end gap-2 min-width: 90px shrink-0">
+              <div className="text-yellow-500 font-bold text-sm">
                 {"⭐".repeat(skill.level)}
               </div>
 
-              {user && (
-                <div className="flex gap-4 mt-4 pt-3 border-t border-gray-100 justify-end">
-                  <button
+              {isAdmin && (
+                <div className="flex gap-2 mt-4 pt-3 border-t border-gray-100 justify-end">
+                  <Button
+                    variant="outline"
+                    size="small"
                     onClick={() => onEdit?.(skill)}
-                    className="text-xs text-gray-400 hover:text-red-500"
+                    className="text-gray-400 hover:text-gray-600 min-w-fit flex-1"
                   >
                     編集
-                  </button>
-                  <button
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="small"
+                    className="text-rose-400 hover:bg-rose-50 flex-1"
                     onClick={() => handleDelete(skill.id)}
-                    className="text-xs text-gray-400 hover:text-red-500"
                   >
                     削除
-                  </button>
+                  </Button>
                 </div>
               )}
             </div>

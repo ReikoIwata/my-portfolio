@@ -32,6 +32,13 @@ export default function Button({
   //  無効化時のスタイル
   const disabledStyle = "disabled:opacity-50 disabled:cursor-not-allowed";
 
+  //  Button の class
+  const sizeClasses = {
+    small: "px-1.5 py-0.5 text-[10px] leading-tight",
+    medium: "px-4 py-2 text-sm",
+    large: "px-6 py-3 text-base",
+  };
+
   return (
     <button
       type={type}
