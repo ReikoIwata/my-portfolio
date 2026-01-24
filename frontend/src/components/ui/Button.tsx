@@ -7,6 +7,7 @@ type ButtonProps = {
   variant?: "primary" | "danger" | "outline"; // 色のパターン
   className?: string;
   disabled?: boolean;
+  size?: "small" | "medium" | "large";
 };
 
 export default function Button({
