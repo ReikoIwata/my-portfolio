@@ -98,10 +98,11 @@ export default function ProjectForm({
         {...register("image_url")}
         placeholder="https://res.cloudinary.com/..."
       />
-
-      <Button type="submit" className="w-full">
-        {editingProject ? "更新する" : "実績を登録する"}
-      </Button>
+      <div className="flex justify-end">
+        <Button type="submit">
+          {editingProject ? "更新する" : "登録する"}
+        </Button>
+      </div>
     </form>
   );
 }

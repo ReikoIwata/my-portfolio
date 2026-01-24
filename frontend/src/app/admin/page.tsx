@@ -118,6 +118,7 @@ export default function AdminPage() {
           <div className="mt-4">
             <SkillList
               key={refreshKey}
+              isAdmin={true}
               onEdit={(skill) => setEditingSkill(skill)}
             />
           </div>

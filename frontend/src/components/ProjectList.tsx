@@ -85,13 +85,14 @@ export default function ProjectList({
                 variant="outline"
                 size="small"
                 onClick={() => onEdit?.(project)}
+                className="text-gray-400 hover:text-gray-600"
               >
                 編集
               </Button>
               <Button
                 variant="outline"
                 size="small"
-                className="text-red-500 hover:bg-red-50"
+                className="text-rose-400 hover:bg-rose-50"
                 onClick={() => handleDelete(project.id)}
               >
                 削除
