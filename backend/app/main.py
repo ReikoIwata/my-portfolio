@@ -30,3 +30,4 @@ def read_root():
     return {
         "message": "Welcome to my portfolio API👌💕🌈",
     }
+
