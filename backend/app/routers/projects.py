@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from .. import models, schemas
 from ..database import get_db
+from ..auth import get_current_user
 
 router = APIRouter(
     prefix="/projects",
@@ -17,7 +18,11 @@ def read_projects(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
 
 # 新規登録
 @router.post("/", response_model=schemas.Project)
-def create_project(project: schemas.ProjectCreate, db: Session = Depends(get_db)):
+def create_project(
+    project: schemas.ProjectCreate, 
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
+    ):
     db_project = models.Project(**project.dict())
     db.add(db_project)
     db.commit()
@@ -26,7 +31,12 @@ def create_project(project: schemas.ProjectCreate, db: Session = Depends(get_db)
 
 # 更新
 @router.put("/{project_id}", response_model=schemas.Project)
-def update_project(project_id: int, project: schemas.ProjectUpdate, db: Session = Depends(get_db)):
+def update_project(
+    project_id: int, 
+    project: schemas.ProjectUpdate, 
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
+    ):
     db_project = db.query(models.Project).filter(models.Project.id == project_id).first()
     if not db_project:
         raise HTTPException(status_code=404, detail="Project not found")
@@ -42,7 +52,10 @@ def update_project(project_id: int, project: schemas.ProjectUpdate, db: Session 
 
 # 削除
 @router.delete("/{project_id}")
-def delete_project(project_id: int, db: Session = Depends(get_db)):
+def delete_project(
+    project_id: int, db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
+    ):
     db_project = db.query(models.Project).filter(models.Project.id == project_id).first()
     if not db_project:
         raise HTTPException(status_code=404, detail="Project not found")

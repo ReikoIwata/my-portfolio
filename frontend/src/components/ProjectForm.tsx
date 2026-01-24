@@ -69,7 +69,7 @@ export default function ProjectForm({
         <label className="text-sm font-medium text-gray-700">説明</label>
         <textarea
           {...register("description", { required: true })}
-          className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-sky-500 min-h-[100px]"
+          className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-sky-500 min-h-25"
           placeholder="プロジェクトの概要や工夫した点"
         />
       </div>
