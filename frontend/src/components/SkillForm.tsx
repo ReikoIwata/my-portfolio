@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { skillSchema, type SkillInput } from "@/lib/schema";
@@ -21,7 +22,13 @@ const LEVEL_OPTIONS = [
   { value: "5", label: "⭐5 (マスター)" },
 ];
 
-export default function SkillForm() {
+export default function SkillForm({
+  editingSkill,
+  onSuccess,
+}: {
+  editingSkill?: any;
+  onSuccess: () => void;
+}) {
   const {
     register,
     handleSubmit,
@@ -31,21 +38,37 @@ export default function SkillForm() {
     resolver: zodResolver(skillSchema),
     defaultValues: {
       name: "",
-      category: "Backend",
+      category: "Frontend",
       level: 3,
     },
   });
 
+  // 編集対象が切り替わったときにフォームを同期する
+  useEffect(() => {
+    if (editingSkill) {
+      reset(editingSkill);
+    } else {
+      reset({ name: "", category: "Frontend", level: 3 });
+    }
+  }, [editingSkill, reset]);
+
   const onSubmit = async (data: SkillInput) => {
     try {
-      await apiRequest("/skills/", {
-        method: "POST",
+      // 編集なら PUT /skills/{id} 、新規なら POST /skills/
+      const url = editingSkill ? `/skills/${editingSkill.id}` : "/skills/";
+      const method = editingSkill ? "PUT" : "POST";
+
+      await apiRequest(url, {
+        method: method,
         body: JSON.stringify(data),
       });
-      toast.success("登録が成功しました✨");
-      reset(); // フォームをクリア
+
+      toast.success(editingSkill ? "更新しました！✨" : "登録しました！🚀");
+
+      // 編集モードを解除し、リストを更新するために親の関数を呼ぶ
+      onSuccess();
     } catch (error) {
-      toast.success("エラーです…💀: " + (error as Error).message);
+      toast.error("失敗しました…: " + (error as Error).message);
     }
   };
 
@@ -56,41 +79,28 @@ export default function SkillForm() {
           label="スキル名"
           {...register("name")}
           placeholder="例: Next.js"
+          error={errors.name?.message}
         />
-        {errors.name && (
-          <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>
-        )}
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div>
-          <Select
-            label="カテゴリ"
-            {...register("category")}
-            options={CATEGORY_OPTIONS}
-          />
-          {errors.category && (
-            <p className="text-red-500 text-xs mt-1">
-              {errors.category.message}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <Select
-            label="習熟度"
-            {...register("level", { valueAsNumber: true })} // 数値として取得
-            options={LEVEL_OPTIONS}
-          />
-          {errors.level && (
-            <p className="text-red-500 text-xs mt-1">{errors.level.message}</p>
-          )}
-        </div>
+        <Select
+          label="カテゴリ"
+          {...register("category")}
+          options={CATEGORY_OPTIONS}
+          error={errors.category?.message}
+        />
+        <Select
+          label="習熟度"
+          {...register("level", { valueAsNumber: true })}
+          options={LEVEL_OPTIONS}
+          error={errors.level?.message}
+        />
       </div>
 
       <div className="flex justify-end pt-2">
-        <Button type="submit" variant="primary">
-          {isSubmitting ? "送信中..." : "登録する"}
+        <Button type="submit" variant="primary" disabled={isSubmitting}>
+          {isSubmitting ? "送信中..." : editingSkill ? "更新する" : "登録する"}
         </Button>
       </div>
     </form>
