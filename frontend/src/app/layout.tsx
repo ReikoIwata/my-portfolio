@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className={inter.className}>
         {/* クライアントコンポーネントのProviderでchildrenを包む */}
         <AuthProvider>{children}</AuthProvider>
-        <Toaster position="top-center" />
+        <Toaster position="top-center" reverseOrder={false} />
       </body>
     </html>
   );

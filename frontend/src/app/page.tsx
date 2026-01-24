@@ -1,4 +1,5 @@
 import SkillList from "@/components/SkillList";
+import ProjectList from "@/components/ProjectList";
 import Link from "next/link";
 
 export default function Home() {
@@ -30,7 +31,7 @@ export default function Home() {
         </Link>
       </header>
 
-      {/* --- プロフィールセクションを追加 --- */}
+      {/* --- プロフィールセクション--- */}
       <section className="mb-16 text-gray-600 leading-relaxed max-w-3xl">
         <div className="space-y-4">
           <p className="text-lg">
@@ -47,16 +48,22 @@ export default function Home() {
           </p>
         </div>
       </section>
-      {/* ---------------------------------- */}
 
+      {/* --- Projects セクション --- */}
+      <section className="mb-20">
+        <h2 className="text-2xl font-bold mb-8 flex items-center gap-2">
+          📁 Featured Projects
+        </h2>
+        <ProjectList />
+      </section>
+
+      {/* --- Skills セクション --- */}
       <section>
         <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
           🚀 Skills
         </h2>
         <SkillList />
       </section>
-
-      {/* 今後 ProjectList などをここに追加していく */}
     </main>
   );
 }

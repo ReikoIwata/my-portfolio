@@ -5,10 +5,13 @@ export type Skill = {
   level: number;
 };
 
-// 今後、Projectなどもここに追加していく
 export type Project = {
   id: number;
   title: string;
   description: string;
-  // ...
+  tech_stack: string;
+  image_url?: string;
+  github_url?: string;
+  site_url?: string;
+  created_at: string;
 };

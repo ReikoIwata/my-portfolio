@@ -6,15 +6,21 @@ import { useEffect, useState } from "react";
 import SkillForm from "@/components/SkillForm";
 import SkillList from "@/components/SkillList";
 import ProfileForm from "@/components/ProfileForm";
+import ProjectList from "@/components/ProjectList";
+import ProjectForm from "@/components/ProjectForm";
 import { Button, Card } from "@/components/ui";
 import LogoutButton from "@/components/LogoutButton";
-import { Skill } from "@/types";
+import { Skill, Project } from "@/types";
 
 export default function AdminPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
+  // スキルの状態
   const [editingSkill, setEditingSkill] = useState<Skill | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  // プロジェクトの状態
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [projectRefreshKey, setProjectRefreshKey] = useState(0);
 
   // ログインしていない場合はプロテクト
   useEffect(() => {
@@ -26,10 +32,16 @@ export default function AdminPage() {
   if (loading) return <p className="p-10">🚪読み込み中...🚪</p>;
   if (!user) return null;
 
-  // 成功時の共通処理
+  // スキル用 handleSuccess
   const handleSuccess = () => {
     setEditingSkill(null);
     setRefreshKey((prev) => prev + 1); // SkillListを再読み込みさせる
+  };
+
+  // 実績用 handleSuccess
+  const handleProjectSuccess = () => {
+    setEditingProject(null);
+    setProjectRefreshKey((prev) => prev + 1);
   };
 
   return (
@@ -47,6 +59,45 @@ export default function AdminPage() {
           </Button>
           <LogoutButton />
         </div>
+      </div>
+
+      <div className="grid gap-12">
+        {/* --- 実績管理セクション --- */}
+        <section className="space-y-6">
+          <div className="flex justify-between items-end">
+            <h2 className="text-xl font-semibold">📁 実績管理</h2>
+          </div>
+
+          <Card>
+            <div className="p-4 border-b bg-gray-50 flex justify-between items-center">
+              <span className="font-medium">
+                {editingProject ? "実績を編集中..." : "新規実績を登録"}
+              </span>
+              {editingProject && (
+                <Button
+                  variant="outline"
+                  size="small"
+                  onClick={() => setEditingProject(null)}
+                >
+                  キャンセル
+                </Button>
+              )}
+            </div>
+            {/* ProjectForm の組み込み */}
+            <ProjectForm
+              editingProject={editingProject}
+              onSuccess={handleProjectSuccess}
+            />
+          </Card>
+
+          <Card title="登録済みの制作実績">
+            <ProjectList
+              key={projectRefreshKey}
+              isAdmin={true}
+              onEdit={(project) => setEditingProject(project)}
+            />
+          </Card>
+        </section>
       </div>
 
       <div className="grid gap-8">
