@@ -5,19 +5,13 @@ import { apiRequest } from "@/lib/api-client";
 import { Card } from "@/components/ui";
 import { useAuth } from "@/context/AuthContext";
 import toast from "react-hot-toast";
-
-type Skill = {
-  id: number;
-  name: string;
-  category: string;
-  level: number;
-};
-
-export default function SkillList({
-  onEdit,
-}: {
+import { Skill } from "@/types";
+interface SkillListProps {
   onEdit?: (skill: Skill) => void;
-}) {
+  refreshKey?: number;
+}
+
+export default function SkillList({ onEdit }: SkillListProps) {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();

@@ -8,11 +8,12 @@ import SkillList from "@/components/SkillList";
 import ProfileForm from "@/components/ProfileForm";
 import { Button, Card } from "@/components/ui";
 import LogoutButton from "@/components/LogoutButton";
+import { Skill } from "@/types";
 
 export default function AdminPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const [editingSkill, setEditingSkill] = useState<any>(null);
+  const [editingSkill, setEditingSkill] = useState<Skill | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
 
   // ログインしていない場合はプロテクト

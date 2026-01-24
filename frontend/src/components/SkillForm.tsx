@@ -7,6 +7,7 @@ import { skillSchema, type SkillInput } from "@/lib/schema";
 import { apiRequest } from "@/lib/api-client";
 import { Button, Input, Select } from "@/components/ui";
 import toast from "react-hot-toast";
+import { Skill } from "@/types";
 
 const CATEGORY_OPTIONS = [
   { value: "Backend", label: "Backend" },
@@ -26,7 +27,7 @@ export default function SkillForm({
   editingSkill,
   onSuccess,
 }: {
-  editingSkill?: any;
+  editingSkill: Skill | null;
   onSuccess: () => void;
 }) {
   const {
