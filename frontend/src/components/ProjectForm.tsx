@@ -5,7 +5,7 @@ import { Project } from "@/types";
 import { apiRequest } from "@/lib/api-client";
 import { Button, Input } from "@/components/ui";
 import toast from "react-hot-toast";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface ProjectFormProps {
   editingProject: Project | null;
@@ -18,7 +18,12 @@ export default function ProjectForm({
   editingProject,
   onSuccess,
 }: ProjectFormProps) {
-  const { register, handleSubmit, reset, setValue } = useForm<ProjectInput>();
+  const { register, handleSubmit, reset, setValue, watch } =
+    useForm<ProjectInput>();
+  const [isUploading, setIsUploading] = useState(false);
+
+  // 画像URLを監視してプレビューを表示
+  const currentImageUrl = watch("image_url");
 
   // 編集モード時に値をセット
   useEffect(() => {
@@ -35,6 +40,34 @@ export default function ProjectForm({
       });
     }
   }, [editingProject, reset]);
+
+  // Cloudinaryへのアップロード処理
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "ReikoIwata's image");
+
+    try {
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/dmfcoffao/image/upload`,
+        { method: "POST", body: formData },
+      );
+      const data = await res.json();
+
+      if (data.secure_url) {
+        setValue("image_url", data.secure_url);
+        toast.success("画像をアップロードしました！📸");
+      }
+    } catch (error) {
+      toast.error("画像のアップロードに失敗しました。");
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   const onSubmit = async (data: ProjectInput) => {
     try {
@@ -58,7 +91,7 @@ export default function ProjectForm({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 p-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 p-4 text-sm">
       <Input
         label="タイトル"
         {...register("title", { required: true })}
@@ -69,7 +102,7 @@ export default function ProjectForm({
         <label className="text-sm font-medium text-gray-700">説明</label>
         <textarea
           {...register("description", { required: true })}
-          className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-sky-500 min-h-25"
+          className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-sky-500 min-h-[100px]"
           placeholder="プロジェクトの概要や工夫した点"
         />
       </div>
@@ -79,6 +112,40 @@ export default function ProjectForm({
         {...register("tech_stack", { required: true })}
         placeholder="React, FastAPI, PostgreSQL (カンマ区切り)"
       />
+
+      {/* 画像アップロードセクション */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-gray-700">
+          プロジェクト画像
+        </label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="block w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+        />
+        {isUploading && (
+          <p className="text-xs text-blue-500 animate-pulse">
+            アップロード中...
+          </p>
+        )}
+
+        {currentImageUrl && (
+          <div className="relative w-full h-40 mt-2">
+            <img
+              src={currentImageUrl}
+              alt="Preview"
+              className="w-full h-full object-cover rounded-md border"
+            />
+          </div>
+        )}
+        {/* URLを手動入力したい時や、hiddenで値を保持するためにInputを表示 */}
+        <Input
+          label="画像URL (自動入力されます)"
+          {...register("image_url")}
+          placeholder="https://res.cloudinary.com/..."
+        />
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
@@ -93,12 +160,7 @@ export default function ProjectForm({
         />
       </div>
 
-      <Input
-        label="画像URL (Cloudinary等)"
-        {...register("image_url")}
-        placeholder="https://res.cloudinary.com/..."
-      />
-      <div className="flex justify-end">
+      <div className="flex justify-end pt-4">
         <Button type="submit">
           {editingProject ? "更新する" : "登録する"}
         </Button>
