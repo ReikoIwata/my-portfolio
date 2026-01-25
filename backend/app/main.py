@@ -11,6 +11,7 @@ app = FastAPI()
 # CORS設定
 origins = [
     "http://localhost:3000", # Next.jsのURLを許可する
+    "https://your-portfolio.vercel.app", # VercelのURLを将来的にここで許可
 ]
 
 app.add_middleware(
