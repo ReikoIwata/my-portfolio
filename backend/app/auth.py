@@ -5,15 +5,20 @@ from firebase_admin import credentials, auth
 from fastapi import HTTPException, Depends, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
-service_account_env = os.getenv("FIREBASE_SERVICE_ACCOUNT")
+service_account_info = os.getenv("FIREBASE_SERVICE_ACCOUNT")
 
-if service_account_env:
+if service_account_info:
     # Render等の本番環境：環境変数の文字列(JSON)をパースする
-    cert_info = json.loads(service_account_env)
-    cred = credentials.Certificate(cert_info)
+    cert_dict = json.loads(service_account_info)
+    cred = credentials.Certificate(cert_dict)
 else:
     # ローカル環境：JSONファイルから読み込む
-    cred = credentials.Certificate("my-portfolio-e3730-0c5402706721.json")
+    json_path = "my-portfolio-e3730-0c5402706721.json"
+    if os.path.exists(json_path):
+        cred = credentials.Certificate(json_path)
+    else:
+        print("Warning: Firebase service account credentials not found.")
+        cred = None
 
 if not firebase_admin._apps:
     firebase_admin.initialize_app(cred)
