@@ -6,6 +6,14 @@ import os
 # 環境変数からDATABASE_URLを取得
 SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
 
+if SQLALCHEMY_DATABASE_URL:
+    # RenderのURLが 'postgres://' で始まっている場合、'postgresql://' に置換する
+    if SQLALCHEMY_DATABASE_URL.startswith("postgres://"):
+        SQLALCHEMY_DATABASE_URL = SQLALCHEMY_DATABASE_URL.replace("postgres://", "postgresql://", 1)
+else:
+    # ローカル開発用のデフォルト（例: SQLite）
+    SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
+
 # データベースエンジンの作成
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
