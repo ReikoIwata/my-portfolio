@@ -11,16 +11,16 @@ app = FastAPI()
 # CORS設定
 origins = [
     "http://localhost:3000",
+    "http://127.0.0.1:3000",
     "https://my-portfolio-pi-pink-18.vercel.app",
-    # もしカスタムドメインや別のVercel URLを使っている場合はここに追加
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"], # 全てのメソッド(GET, POST, OPTIONS等)を許可
-    allow_headers=["*"], # 全てのヘッダーを許可
+    allow_methods=["*"], 
+    allow_headers=["*"], 
 )
 
 # ルーターを登録

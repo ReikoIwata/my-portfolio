@@ -4,16 +4,15 @@ from datetime import datetime
 
 # --- Profile関連 ---
 class ProfileBase(BaseModel):
-    fullName: str 
+    fullName: str
     title: str
     bio: Optional[str] = None
     image_url: Optional[str] = None
     github_url: Optional[str] = None
     twitter_url: Optional[str] = None
 
-    # Pydantic v2 設定方法
     model_config = ConfigDict(
-        from_attributes=True   # SQLAlchemyモデルからの変換を許可
+        from_attributes=True
     )
 
 class ProfileCreate(ProfileBase):
@@ -30,6 +29,12 @@ class SkillBase(BaseModel):
     icon_url: Optional[str] = None
     
     model_config = ConfigDict(from_attributes=True)
+
+class SkillUpdate(BaseModel):
+    name: str | None = None
+    level: int | None = None
+    icon_url: Optional[str] = None
+    
 
 class SkillCreate(SkillBase):
     pass
@@ -54,3 +59,14 @@ class ProjectCreate(ProjectBase):
 class Project(ProjectBase):
     id: int
     created_at: datetime
+
+class ProjectUpdate(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    tech_stack: Optional[str] = None
+    image_url: Optional[str] = None
+    github_url: Optional[str] = None
+    site_url: Optional[str] = None
+
+class ProjectCreate(ProjectBase):
+    pass

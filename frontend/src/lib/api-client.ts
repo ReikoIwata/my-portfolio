@@ -23,6 +23,8 @@ export const apiRequest = async (
   headers.set("Content-Type", "application/json");
 
   // フェッチの実行
+  console.log("リクエスト先:", `${BASE_URL}${endpoint}`); // これを追加
+
   const response = await fetch(`${BASE_URL}${endpoint}`, {
     ...options,
     headers,

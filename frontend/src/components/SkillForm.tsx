@@ -10,17 +10,17 @@ import toast from "react-hot-toast";
 import { Skill } from "@/types";
 
 const CATEGORY_OPTIONS = [
-  { value: "Backend", label: "Backend" },
-  { value: "Frontend", label: "Frontend" },
-  { value: "Tool", label: "Tool" },
+  { value: "Backend", label: "🌿 Backend" },
+  { value: "Frontend", label: "🍃 Frontend" },
+  { value: "Tool", label: "🌳 Tool" },
 ];
 
 const LEVEL_OPTIONS = [
-  { value: "1", label: "⭐1 (学習中)" },
-  { value: "2", label: "⭐2 (基礎)" },
-  { value: "3", label: "⭐3 (実務レベル)" },
-  { value: "4", label: "⭐4 (得意)" },
-  { value: "5", label: "⭐5 (マスター)" },
+  { value: "1", label: "🌱 Step 1 (学習中)" },
+  { value: "2", label: "🌿 Step 2 (基礎)" },
+  { value: "3", label: "🌳 Step 3 (実務レベル)" },
+  { value: "4", label: "✨ Step 4 (得意)" },
+  { value: "5", label: "👑 Step 5 (マスター)" },
 ];
 
 export default function SkillForm({
@@ -44,7 +44,6 @@ export default function SkillForm({
     },
   });
 
-  // 編集対象が切り替わったときにフォームを同期する
   useEffect(() => {
     if (editingSkill) {
       reset(editingSkill);
@@ -55,7 +54,6 @@ export default function SkillForm({
 
   const onSubmit = async (data: SkillInput) => {
     try {
-      // 編集なら PUT /skills{id} 、新規なら POST /skills
       const url = editingSkill ? `/skills/${editingSkill.id}` : "/skills";
       const method = editingSkill ? "PUT" : "POST";
 
@@ -64,27 +62,33 @@ export default function SkillForm({
         body: JSON.stringify(data),
       });
 
-      toast.success(editingSkill ? "更新しました！✨" : "登録しました！🚀");
-
-      // 編集モードを解除し、リストを更新するために親の関数を呼ぶ
+      toast.success(
+        editingSkill ? "スキルを更新しました！✨" : "スキルを登録しました！🌱",
+      );
       onSuccess();
     } catch (error) {
-      toast.error("失敗しました…: " + (error as Error).message);
+      toast.error("保存に失敗しました…: " + (error as Error).message);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <div>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-8 bg-[#fdfbf9] p-2 rounded-xl"
+    >
+      {/* スキル名： */}
+      <div className="relative group">
         <Input
           label="スキル名"
           {...register("name")}
-          placeholder="例: Next.js"
+          placeholder="例: Next.js / TypeScript"
           error={errors.name?.message}
+          className="text-lg"
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      {/* カテゴリと習熟度：*/}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Select
           label="カテゴリ"
           {...register("category")}
@@ -99,9 +103,24 @@ export default function SkillForm({
         />
       </div>
 
-      <div className="flex justify-end pt-2">
-        <Button type="submit" variant="primary" disabled={isSubmitting}>
-          {isSubmitting ? "送信中..." : editingSkill ? "更新する" : "登録する"}
+      {/* 登録ボタン */}
+      <div className="flex justify-end items-center gap-4 pt-4 border-t border-[#ede7de]">
+        {editingSkill && (
+          <p className="text-xs text-[#a5a58d] italic">
+            editing: {editingSkill.name}
+          </p>
+        )}
+        <Button
+          type="submit"
+          variant="primary"
+          disabled={isSubmitting}
+          className="min-w-[140px] shadow-md"
+        >
+          {isSubmitting
+            ? "登録中...⌛"
+            : editingSkill
+              ? "変更を保存"
+              : "スキルを登録"}
         </Button>
       </div>
     </form>
