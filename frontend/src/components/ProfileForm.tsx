@@ -29,7 +29,7 @@ export default function ProfileForm() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const data = await apiRequest("/profile/");
+        const data = await apiRequest("/profile");
         const profile = Array.isArray(data) ? data[0] : data;
         if (profile) {
           reset(profile);
@@ -74,7 +74,7 @@ export default function ProfileForm() {
 
   const onSubmit = async (data: ProfileFormData) => {
     try {
-      await apiRequest("/profile/", {
+      await apiRequest("/profile", {
         method: "POST",
         body: JSON.stringify(data),
       });

@@ -53,18 +53,25 @@ export default function SkillList({ onEdit, isAdmin }: SkillListProps) {
       {skills.map((skill) => (
         <div key={skill.id} className="group relative">
           <div className="space-y-2">
-            {/* カテゴリ：極小フォントでさりげなく */}
+            {/* カテゴリ： */}
             <span className="text-[10px] tracking-[0.2em] uppercase text-[#a5a58d] block font-bold">
               {skill.category}
             </span>
             <h3 className="text-sm font-medium text-[#3f4238] border-b border-[#e9e4db] pb-2 flex justify-between items-end">
               {skill.name}
-              {/* レベルをドットで表現 */}
-              <span className="flex gap-0.5 mb-1">
+              <span className="flex gap-1.5 mb-1.5 ml-2 shrink-0">
                 {[...Array(5)].map((_, i) => (
                   <span
                     key={i}
-                    className={`w-1 h-1 rounded-full ${i < skill.level ? "bg-[#cb997e]" : "bg-[#e9e4db]"}`}
+                    className={`
+                      w-2 h-2 rounded-full border 
+                      transition-colors duration-500
+                      ${
+                        i < skill.level
+                          ? "bg-[#cb997e] border-2 border-[#cb997e]"
+                          : "bg-transparent border-2 border-[#d3ccbf]"
+                      }
+        `}
                   />
                 ))}
               </span>
@@ -77,13 +84,13 @@ export default function SkillList({ onEdit, isAdmin }: SkillListProps) {
                 onClick={() => onEdit?.(skill)}
                 className="p-1 bg-white shadow-sm rounded-full text-[10px] text-[#6b705c] hover:bg-[#f5f2ed]"
               >
-                ✎
+                EDIT
               </button>
               <button
                 onClick={() => handleDelete(skill.id)}
                 className="p-1 bg-white shadow-sm rounded-full text-[10px] text-rose-300 hover:bg-rose-50"
               >
-                ✕
+                DELETE
               </button>
             </div>
           )}

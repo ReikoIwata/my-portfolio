@@ -125,10 +125,10 @@ export default function ProjectForm({
           type="file"
           accept="image/*"
           onChange={handleImageChange}
-          className="block w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+          className="text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-8 file:text-xs file:font-semibold file:bg-[#6b705c] file:text-white hover:file:bg-[#3f4238] cursor-pointer"
         />
         {isUploading && (
-          <p className="text-xs text-blue-500 animate-pulse">
+          <p className="text-xs text-gray-700 animate-pulse">
             アップロード中...
           </p>
         )}

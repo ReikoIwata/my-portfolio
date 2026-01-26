@@ -10,6 +10,8 @@ class Profile(Base):
     title = Column(String(100), nullable=True)
     bio = Column(Text, nullable=True)
     image_url = Column(String, nullable=True) # Firebase StorageのURLを保存
+    github_url = Column(String, nullable=True)
+    twitter_url = Column(String, nullable=True)
 
 class Skill(Base):
     __tablename__ = "skills"

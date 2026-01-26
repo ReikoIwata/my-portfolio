@@ -19,16 +19,32 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body
-        className={`${inter.className} bg-[#020617] text-slate-200 antialiased`}
+        className={`${inter.className} bg-[#f8f5f0] text-[#3f4238] antialiased selection:bg-[#cb997e]/20`}
       >
         <AuthProvider>{children}</AuthProvider>
+
         <Toaster
           position="top-center"
           toastOptions={{
             style: {
-              background: "#1e293b",
-              color: "#fff",
-              border: "1px solid #334155",
+              background: "#fdfbf9",
+              color: "#3f4238",
+              border: "2px solid #e9e4db",
+              borderRadius: "9999px",
+              fontSize: "14px",
+              fontWeight: "600",
+            },
+            success: {
+              iconTheme: {
+                primary: "#6b705c",
+                secondary: "#fff",
+              },
+            },
+            error: {
+              iconTheme: {
+                primary: "#a47148",
+                secondary: "#fff",
+              },
             },
           }}
         />

@@ -1,4 +1,3 @@
-// src/app/admin/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -21,7 +20,6 @@ export default function AdminPage() {
     "profile",
   );
 
-  // 編集用ステート
   const [editingSkill, setEditingSkill] = useState<Skill | null>(null);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -30,69 +28,90 @@ export default function AdminPage() {
     if (!loading && !user) router.push("/");
   }, [user, loading, router]);
 
-  if (loading) return <p className="p-10 text-center">🚪読み込み中...🚪</p>;
+  if (loading)
+    return (
+      <p className="p-10 text-center text-[#6b705c] animate-pulse">
+        🌿 読み込み中... 🌿
+      </p>
+    );
   if (!user) return null;
 
   return (
-    <main className="max-w-4xl mx-auto p-8">
-      <header className="flex justify-between items-center mb-8 pb-6 border-b">
+    <main className="max-w-5xl mx-auto p-8 min-h-screen">
+      {/* ヘッダー */}
+      <header className="flex justify-between items-end mb-12 pb-6 border-b border-[#e9e4db]">
         <div>
-          <h1 className="text-2xl font-bold">🛠 Admin Dashboard</h1>
-          <p className="text-sm text-gray-500">{user.displayName} さん</p>
+          <h1 className="text-3xl font-serif italic text-[#3f4238] tracking-tight">
+            Admin Dashboard
+          </h1>
+          <p className="text-sm text-[#a5a58d] mt-1">
+            Welcome back,{" "}
+            <span className="font-bold text-[#6b705c]">{user.displayName}</span>
+          </p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={() => router.push("/")}>
-            トップ表示
+        <div className="flex gap-3">
+          <Button
+            variant="outline"
+            size="small"
+            onClick={() => router.push("/")}
+          >
+            サイトを表示
           </Button>
           <LogoutButton />
         </div>
       </header>
 
       {/* タブナビゲーション */}
-      <div className="flex border-b mb-8 gap-4">
+      <nav className="flex border-b border-[#e9e4db] mb-10 gap-2">
         {[
-          { id: "profile", label: "プロフィール", icon: "👤" },
-          { id: "projects", label: "実績管理", icon: "📁" },
-          { id: "skills", label: "スキル管理", icon: "🚀" },
+          { id: "profile", label: "Profile", icon: "🍃" },
+          { id: "projects", label: "Projects", icon: "🎨" },
+          { id: "skills", label: "Skills", icon: "🌱" },
         ].map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
-            className={`pb-3 px-4 text-sm font-medium transition-colors ${
-              activeTab === tab.id
-                ? "border-b-2 border-sky-500 text-sky-600"
-                : "text-gray-400"
-            }`}
+            className={`
+              relative pb-4 px-6 text-sm font-bold transition-all duration-300
+              ${
+                activeTab === tab.id
+                  ? "text-[#6b705c]"
+                  : "text-[#a5a58d] hover:text-[#6b705c]"
+              }
+            `}
           >
-            {tab.icon} {tab.label}
+            <span className="flex items-center gap-2">
+              <span className="text-lg">{tab.icon}</span> {tab.label}
+            </span>
+            {activeTab === tab.id && (
+              <div className="absolute bottom-px left-0 w-full h-0.75 bg-[#cb997e] rounded-t-full" />
+            )}
           </button>
         ))}
-      </div>
+      </nav>
 
       {/* コンテンツエリア */}
-      <div className="space-y-6">
+      <div className="space-y-10 animate-in fade-in slide-in-from-bottom-2 duration-700">
         {activeTab === "profile" && (
-          <div className="grid gap-6">
-            {/* 現在のプロフィールの簡易プレビュー */}
-            <Card title="現在の公開内容">
-              <div className="p-4 bg-gray-50 rounded-lg border border-dashed border-gray-300">
-                <p className="text-xs text-gray-400 mb-2 font-bold uppercase">
-                  Preview
-                </p>
-                <ProfileView /> {/* すでに作ったコンポーネントを再利用！ */}
-              </div>
-            </Card>
-
-            {/* 編集フォーム */}
-            <Card title="内容を編集する">
-              <ProfileForm />
-            </Card>
+          <div className="grid gap-10 lg:grid-cols-[1fr_400px]">
+            <div className="order-2 lg:order-1">
+              <Card title="内容を編集する">
+                <ProfileForm />
+              </Card>
+            </div>
+            <div className="order-1 lg:order-2">
+              <Card title="プレビュー">
+                <div className="p-4 bg-[#fcfaf8] rounded-xl border border-dashed border-[#e9e4db] overflow-hidden scale-[0.9] origin-top">
+                  <ProfileView />
+                </div>
+              </Card>
+            </div>
           </div>
         )}
 
         {activeTab === "projects" && (
-          <div className="grid gap-6">
-            <Card title={editingProject ? "実績を編集" : "新規実績の登録"}>
+          <div className="grid gap-10">
+            <Card title={editingProject ? "実績を編集する" : "実績を登録する"}>
               <ProjectForm
                 editingProject={editingProject}
                 onSuccess={() => {
@@ -103,14 +122,14 @@ export default function AdminPage() {
               {editingProject && (
                 <Button
                   variant="outline"
-                  className="mt-2 w-full"
+                  className="mt-4 w-full"
                   onClick={() => setEditingProject(null)}
                 >
-                  キャンセル
+                  キャンセルして戻る
                 </Button>
               )}
             </Card>
-            <Card title="登録済みの制作実績">
+            <Card title="実績一覧">
               <ProjectList
                 key={refreshKey}
                 isAdmin={true}
@@ -121,8 +140,8 @@ export default function AdminPage() {
         )}
 
         {activeTab === "skills" && (
-          <div className="grid gap-6">
-            <Card title={editingSkill ? "スキルを編集" : "スキルの追加"}>
+          <div className="grid gap-10 lg:grid-cols-[450px_1fr]">
+            <Card title={editingSkill ? "スキルを編集" : "スキルを登録する"}>
               <SkillForm
                 editingSkill={editingSkill}
                 onSuccess={() => {
@@ -133,7 +152,7 @@ export default function AdminPage() {
               {editingSkill && (
                 <Button
                   variant="outline"
-                  className="mt-2 w-full"
+                  className="mt-4 w-full"
                   onClick={() => setEditingSkill(null)}
                 >
                   キャンセル
