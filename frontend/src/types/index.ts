@@ -22,4 +22,6 @@ export interface Profile {
   title: string;
   bio: string;
   image_url?: string;
+  githubUrl?: string;
+  twitterUrl?: string;
 }
