@@ -36,7 +36,7 @@ export default function SkillList({ onEdit, isAdmin }: SkillListProps) {
     if (!window.confirm("このスキルを削除してもよろしいですか？")) return;
 
     try {
-      await apiRequest(`/skills${id}`, { method: "DELETE" });
+      await apiRequest(`/skills/${id}`, { method: "DELETE" });
       toast.success("スキルを削除しました✨");
       fetchSkills(); // リストを再読み込み
     } catch (error) {
