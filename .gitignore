@@ -1,6 +1,11 @@
 .env
 __pycache__/
 *.pyc
+*.py[cod]
+*$py.class
 
 # backendフォルダの中にある特定のJSONファイルを無視
 backend/my-portfolio-e3730-0c5402706721.json
+
+# Databases
+*.sqlite3

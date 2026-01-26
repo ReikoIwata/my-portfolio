@@ -1,12 +1,27 @@
+import os
+import json
 import firebase_admin
 from firebase_admin import credentials, auth
 from fastapi import HTTPException, Depends, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-import os
 
-# Firebase Admin SDKの初期化
-cred = credentials.Certificate("my-portfolio-e3730-0c5402706721.json")
-firebase_admin.initialize_app(cred)
+service_account_info = os.getenv("FIREBASE_SERVICE_ACCOUNT")
+
+if service_account_info:
+    # Render等の本番環境：環境変数の文字列(JSON)をパースする
+    cert_dict = json.loads(service_account_info)
+    cred = credentials.Certificate(cert_dict)
+else:
+    # ローカル環境：JSONファイルから読み込む
+    json_path = "my-portfolio-e3730-0c5402706721.json"
+    if os.path.exists(json_path):
+        cred = credentials.Certificate(json_path)
+    else:
+        print("Warning: Firebase service account credentials not found.")
+        cred = None
+
+if not firebase_admin._apps:
+    firebase_admin.initialize_app(cred)
 
 # Bearerトークンを取得するための設定
 security = HTTPBearer()
