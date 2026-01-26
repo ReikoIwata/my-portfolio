@@ -25,7 +25,7 @@ export default function ProfileForm() {
   // 画像URLを監視
   const currentImageUrl = watch("image_url");
 
-  // 初期値の取得（既存のプロフィールがあればセット）
+  // 初期値の取得
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -113,7 +113,7 @@ export default function ProfileForm() {
           </div>
         </div>
 
-        {/* 右側：写真アップロード */}
+        {/* 写真アップロード */}
         <div className="space-y-4">
           <label className="block text-sm font-bold text-[#3f4238]">
             プロフィール写真
@@ -144,7 +144,7 @@ export default function ProfileForm() {
 
             {isUploading && (
               <p className="text-xs text-[#cb997e] animate-pulse">
-                アップロード中...
+                アップロード中...⌛
               </p>
             )}
           </div>

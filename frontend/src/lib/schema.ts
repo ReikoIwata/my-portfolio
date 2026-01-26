@@ -27,23 +27,15 @@ export type SkillInput = z.infer<typeof skillSchema>;
 // プロフィール用スキーマ
 export const profileSchema = z.object({
   fullName: z.string().min(1, "名前は必須です"),
-  title: z.string().min(1, "肩書き（職業など）は必須です"),
-  bio: z.string().max(500, "自己紹介は500文字以内で入力してください"),
-
-  // --- ここに image_url を追加！ ---
-  image_url: z
+  title: z.string().min(1, "肩書きは必須です"),
+  bio: z.string().max(500).optional().or(z.literal("")),
+  image_url: z.string().optional().or(z.literal("")),
+  github_url: z
     .string()
     .url("有効なURLを入力してください")
     .optional()
     .or(z.literal("")),
-
-  githubUrl: z
-    .string()
-    .url("有効なURLを入力してください")
-    .optional()
-    .or(z.literal("")),
-
-  twitterUrl: z
+  twitter_url: z
     .string()
     .url("有効なURLを入力してください")
     .optional()
