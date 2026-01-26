@@ -4,7 +4,8 @@ from datetime import datetime
 
 # profile関連のスキーマ
 class ProfileCreate(BaseModel):
-    name: str
+    fullName: str
+    title: str
     bio: Optional[str] = None
     image_url: Optional[str] = None
 

@@ -15,3 +15,11 @@ export type Project = {
   site_url?: string;
   created_at: string;
 };
+
+export interface Profile {
+  id?: number;
+  fullName: string;
+  title: string;
+  bio: string;
+  image_url?: string;
+}

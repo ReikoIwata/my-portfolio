@@ -14,7 +14,7 @@ router = APIRouter(
 def get_profile(db: Session = Depends(get_db)):
     profile = db.query(models.Profile).first()
     if not profile:
-        # データがない場合は404を返すと親切です
+        # データがない場合は404を返す
         raise HTTPException(status_code=404, detail="Profile not found")
     return profile
 
@@ -25,8 +25,8 @@ def create_or_update_profile(
     db: Session = Depends(get_db),
     current_user: dict = Depends(get_current_user)
 ):
+    db_profile = db.query(models.Profile).first()
 
-    print(f"Validated user: {current_user['email']}")
     if db_profile:
         # 更新処理
         for key, value in profile_data.model_dump().items():

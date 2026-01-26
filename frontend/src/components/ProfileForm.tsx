@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { profileSchema, type ProfileFormData } from "@/lib/schema";
+import { apiRequest } from "@/lib/api-client";
 import { Input, Button } from "@/components/ui";
 import toast from "react-hot-toast";
 
@@ -17,7 +18,10 @@ export default function ProfileForm() {
 
   const onSubmit = async (data: ProfileFormData) => {
     try {
-      // APIにPATCHまたはPUTで送信する想定
+      await apiRequest("/profile/", {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
       toast.success("プロフィールを更新しました！✨");
     } catch (error) {
       toast.error("更新に失敗しました");
