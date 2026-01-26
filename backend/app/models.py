@@ -3,10 +3,11 @@ from sqlalchemy.sql import func
 from .database import Base
 
 class Profile(Base):
-    __tablename__ = "profiles"
+    __tablename__ = "profile"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(100), nullable=False)
+    fullName = Column(String(100), nullable=False)
+    title = Column(String(100), nullable=True)
     bio = Column(Text, nullable=True)
     image_url = Column(String, nullable=True) # Firebase StorageのURLを保存
 

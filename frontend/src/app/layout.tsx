@@ -18,10 +18,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body className={inter.className}>
-        {/* クライアントコンポーネントのProviderでchildrenを包む */}
+      <body
+        className={`${inter.className} bg-[#020617] text-slate-200 antialiased`}
+      >
         <AuthProvider>{children}</AuthProvider>
-        <Toaster position="top-center" reverseOrder={false} />
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            style: {
+              background: "#1e293b",
+              color: "#fff",
+              border: "1px solid #334155",
+            },
+          }}
+        />
       </body>
     </html>
   );
