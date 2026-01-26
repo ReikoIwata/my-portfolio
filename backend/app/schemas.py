@@ -4,7 +4,7 @@ from datetime import datetime
 
 # --- Profile関連 ---
 class ProfileBase(BaseModel):
-    full_name: str = Field(..., alias="fullName") 
+    fullName: str 
     title: str
     bio: Optional[str] = None
     image_url: Optional[str] = None
@@ -13,7 +13,6 @@ class ProfileBase(BaseModel):
 
     # Pydantic v2 設定方法
     model_config = ConfigDict(
-        populate_by_name=True, # エイリアス(fullName)と変数名(full_name)両方を許可
         from_attributes=True   # SQLAlchemyモデルからの変換を許可
     )
 
