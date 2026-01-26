@@ -8,6 +8,8 @@ class ProfileCreate(BaseModel):
     title: str
     bio: Optional[str] = None
     image_url: Optional[str] = None
+    github_url: Optional[str] = None
+    twitter_url: Optional[str] = None
 
 class ProfileResponse(ProfileCreate):
     id: int

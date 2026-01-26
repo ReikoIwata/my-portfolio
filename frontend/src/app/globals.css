@@ -21,4 +21,6 @@ body {
   color: var(--foreground);
   font-family: var(--font-inter), sans-serif;
   -webkit-font-smoothing: antialiased;
+  background-image: url("https://www.transparenttextures.com/patterns/felt.png");
+  background-attachment: fixed;
 }

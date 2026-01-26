@@ -25,7 +25,9 @@ export default function ProfileView() {
 
   if (loading)
     return (
-      <div className="py-10 animate-pulse text-gray-400">読み込み中...⌛</div>
+      <div className="py-20 animate-pulse text-[#a5a58d] text-center tracking-widest uppercase text-xs">
+        Loading Story...
+      </div>
     );
 
   const displayProfile = profile || {
@@ -36,13 +38,13 @@ export default function ProfileView() {
   };
 
   return (
-    <section className="mb-16 flex flex-col md:flex-row items-center gap-8 max-w-4xl">
-      {/* 画像エリア */}
+    <section className="mb-24 flex flex-col md:flex-row items-center gap-12 md:gap-16 max-w-4xl mx-auto">
+      {/* 画像エリア：ポラロイド風・強い影 */}
       <div className="relative group">
-        {/* 写真の下に敷く「強い影」の演出 */}
-        <div className="absolute inset-0 bg-black/20 translate-x-4 translate-y-4 blur-2xl rounded-sm"></div>
+        {/* さらに深い「落ち影」の演出 */}
+        <div className="absolute inset-0 bg-black/10 translate-x-6 translate-y-6 blur-3xl rounded-sm"></div>
 
-        <div className="relative w-60 h-60 shrink-0 overflow-hidden  shadow-[20px_20px_50px_rgba(0,0,0,0.3)] transition-transform duration-500 group-hover:-translate-y-2">
+        <div className="relative w-64 h-60 shrink-0 overflow-hidden shadow-[25px_25px_60px_rgba(0,0,0,0.15)] transition-all duration-700 group-hover:-translate-y-2 group-hover:shadow-[30px_30px_70px_rgba(0,0,0,0.2)]">
           <Image
             src={
               displayProfile.image_url ||
@@ -50,28 +52,31 @@ export default function ProfileView() {
             }
             alt={displayProfile.fullName}
             fill
-            className="object-cover grayscale-[10%] group-hover:grayscale-0 transition-all duration-700"
+            className="object-cover grayscale-15 group-hover:grayscale-0 transition-all duration-1000 ease-in-out"
           />
         </div>
       </div>
 
-      {/* テキストエリア */}
-      <div className="space-y-4 text-gray-600 leading-relaxed">
-        <p className="text-lg">
-          <span className="font-bold text-gray-800">
+      {/* テキストエリア：落ち着いた配色とフォント使い */}
+      <div className="flex-1 space-y-6 text-[#6b705c] leading-relaxed">
+        <div className="space-y-2">
+          <h2 className="text-3xl font-serif italic text-[#3f4238] tracking-tight">
             {displayProfile.fullName}
-          </span>{" "}
-          のポートフォリオをご覧いただきありがとうございます。
-        </p>
-        <p>
-          私は現在、
-          <span className="text-gray-800 font-medium">
+          </h2>
+          <p className="text-[#cb997e] font-medium tracking-widest uppercase text-xs">
             {displayProfile.title}
-          </span>
-          として活動しております。
-        </p>
-        <p className="whitespace-pre-wrap pt-2 border-l-2 border-gray-200 pl-4 italic">
-          {displayProfile.bio}
+          </p>
+        </div>
+
+        <div className="relative py-4">
+          {/* 自己紹介文：アースカラーなアクセントライン */}
+          <p className="whitespace-pre-wrap text-lg font-light text-[#5a5a4a] border-l border-[#cb997e]/40 pl-6">
+            {displayProfile.bio}
+          </p>
+        </div>
+
+        <p className="text-sm text-[#a5a58d] font-light">
+          Based in Tokyo, exploring the intersection of art and technology.
         </p>
       </div>
     </section>
