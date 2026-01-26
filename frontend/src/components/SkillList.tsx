@@ -18,7 +18,7 @@ export default function SkillList({ onEdit, isAdmin }: SkillListProps) {
 
   const fetchSkills = async () => {
     try {
-      const data = await apiRequest("/skills/");
+      const data = await apiRequest("/skills");
       setSkills(data);
     } catch (error) {
       console.error("スキル取得に失敗しました💦:", error);
@@ -36,7 +36,7 @@ export default function SkillList({ onEdit, isAdmin }: SkillListProps) {
     if (!window.confirm("このスキルを削除してもよろしいですか？")) return;
 
     try {
-      await apiRequest(`/skills/${id}`, { method: "DELETE" });
+      await apiRequest(`/skills${id}`, { method: "DELETE" });
       toast.success("スキルを削除しました✨");
       fetchSkills(); // リストを再読み込み
     } catch (error) {

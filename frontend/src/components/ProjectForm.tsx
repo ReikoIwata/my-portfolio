@@ -75,13 +75,13 @@ export default function ProjectForm({
   const onSubmit = async (data: ProjectInput) => {
     try {
       if (editingProject) {
-        await apiRequest(`/projects/${editingProject.id}`, {
+        await apiRequest(`/projects${editingProject.id}`, {
           method: "PUT",
           body: JSON.stringify(data),
         });
         toast.success("実績を更新しました！✨");
       } else {
-        await apiRequest("/projects/", {
+        await apiRequest("/projects", {
           method: "POST",
           body: JSON.stringify(data),
         });

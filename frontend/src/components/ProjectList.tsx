@@ -20,7 +20,7 @@ export default function ProjectList({
 
   const fetchProjects = async () => {
     try {
-      const data = await apiRequest("/projects/");
+      const data = await apiRequest("/projects");
       setProjects(data);
     } catch (error) {
       console.error("実績の取得に失敗しました:", error);
@@ -36,7 +36,7 @@ export default function ProjectList({
   const handleDelete = async (id: number) => {
     if (!window.confirm("この実績を削除しますか？")) return;
     try {
-      await apiRequest(`/projects/${id}`, { method: "DELETE" });
+      await apiRequest(`/projects${id}`, { method: "DELETE" });
       toast.success("削除しました");
       fetchProjects();
     } catch (error) {
