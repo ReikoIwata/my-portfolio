@@ -47,59 +47,61 @@ export default function ProjectList({
   if (loading) return <p className="text-center py-10">読み込み中...⌛</p>;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
       {projects.map((project) => (
-        <Card key={project.id} className="overflow-hidden flex flex-col">
-          {/* 画像がある場合は表示 */}
-          {project.image_url && (
-            <img
-              src={project.image_url}
-              alt={project.title}
-              className="w-full h-48 object-cover"
-            />
-          )}
+        <article key={project.id} className="group cursor-pointer">
+          <div className="relative aspect-video mb-6 overflow-hidden rounded-sm bg-[#e9e4db]">
+            {project.image_url ? (
+              <img
+                src={project.image_url}
+                alt={project.title}
+                className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-[#a5a58d] text-xs tracking-widest uppercase">
+                No Image
+              </div>
+            )}
+          </div>
 
-          <div className="p-4 grow">
-            <h3 className="text-xl font-bold">{project.title}</h3>
-            <p className="text-gray-600 text-sm mt-2 line-clamp-3">
+          <div className="space-y-3">
+            <h3 className="text-lg font-medium text-[#3f4238] group-hover:text-[#cb997e] transition-colors">
+              {project.title}
+            </h3>
+
+            <p className="text-sm text-[#6b705c] leading-relaxed line-clamp-2 font-light">
               {project.description}
             </p>
 
-            {/* 技術タグの表示 */}
-            <div className="flex flex-wrap gap-2 mt-4">
+            <div className="flex flex-wrap gap-x-3 gap-y-1">
               {project.tech_stack.split(",").map((tech) => (
                 <span
                   key={tech}
-                  className="text-[10px] px-2 py-1 bg-slate-100 text-slate-600 rounded-md border border-slate-200"
+                  className="text-[10px] text-[#a5a58d] uppercase tracking-wider"
                 >
-                  {tech.trim()}
+                  #{tech.trim()}
                 </span>
               ))}
             </div>
-          </div>
 
-          {/* 管理者用のボタン */}
-          {isAdmin && (
-            <div className="p-4 border-t flex justify-end gap-2 bg-slate-50">
-              <Button
-                variant="outline"
-                size="small"
-                onClick={() => onEdit?.(project)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                編集
-              </Button>
-              <Button
-                variant="outline"
-                size="small"
-                className="text-rose-400 hover:bg-rose-50"
-                onClick={() => handleDelete(project.id)}
-              >
-                削除
-              </Button>
-            </div>
-          )}
-        </Card>
+            {isAdmin && (
+              <div className="flex gap-4 pt-4 border-t border-[#e9e4db] mt-4">
+                <button
+                  onClick={() => onEdit?.(project)}
+                  className="text-[10px] uppercase tracking-tighter text-[#a5a58d] hover:text-[#6b705c]"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(project.id)}
+                  className="text-[10px] uppercase tracking-tighter text-rose-300 hover:text-rose-500"
+                >
+                  Delete
+                </button>
+              </div>
+            )}
+          </div>
+        </article>
       ))}
     </div>
   );

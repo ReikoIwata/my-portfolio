@@ -49,47 +49,45 @@ export default function SkillList({ onEdit, isAdmin }: SkillListProps) {
     return <p className="text-center py-10">登録されたスキルがありません。</p>;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {skills.map((skill) => (
-        <Card
-          key={skill.id}
-          className="hover:border-blue-300 transition-colors relative group"
-        >
-          <div className="flex justify-between items-start">
-            <div>
-              <span className="text-xs font-semibold px-2 py-1 bg-blue-100 text-blue-700 rounded-full">
-                {skill.category}
+        <div key={skill.id} className="group relative">
+          <div className="space-y-2">
+            {/* カテゴリ：極小フォントでさりげなく */}
+            <span className="text-[10px] tracking-[0.2em] uppercase text-[#a5a58d] block font-bold">
+              {skill.category}
+            </span>
+            <h3 className="text-sm font-medium text-[#3f4238] border-b border-[#e9e4db] pb-2 flex justify-between items-end">
+              {skill.name}
+              {/* レベルをドットで表現 */}
+              <span className="flex gap-0.5 mb-1">
+                {[...Array(5)].map((_, i) => (
+                  <span
+                    key={i}
+                    className={`w-1 h-1 rounded-full ${i < skill.level ? "bg-[#cb997e]" : "bg-[#e9e4db]"}`}
+                  />
+                ))}
               </span>
-              <h3 className="text-lg font-bold mt-2">{skill.name}</h3>
-            </div>
-            <div className="flex flex-col items-end gap-2 min-width: 90px shrink-0">
-              <div className="text-yellow-500 font-bold text-sm">
-                {"⭐".repeat(skill.level)}
-              </div>
-
-              {isAdmin && (
-                <div className="flex gap-2 mt-4 pt-3 border-t border-gray-100 justify-end">
-                  <Button
-                    variant="outline"
-                    size="small"
-                    onClick={() => onEdit?.(skill)}
-                    className="text-gray-400 hover:text-gray-600 min-w-fit flex-1"
-                  >
-                    編集
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="small"
-                    className="text-rose-400 hover:bg-rose-50 flex-1"
-                    onClick={() => handleDelete(skill.id)}
-                  >
-                    削除
-                  </Button>
-                </div>
-              )}
-            </div>
+            </h3>
           </div>
-        </Card>
+
+          {isAdmin && (
+            <div className="absolute -top-2 -right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <button
+                onClick={() => onEdit?.(skill)}
+                className="p-1 bg-white shadow-sm rounded-full text-[10px] text-[#6b705c] hover:bg-[#f5f2ed]"
+              >
+                ✎
+              </button>
+              <button
+                onClick={() => handleDelete(skill.id)}
+                className="p-1 bg-white shadow-sm rounded-full text-[10px] text-rose-300 hover:bg-rose-50"
+              >
+                ✕
+              </button>
+            </div>
+          )}
+        </div>
       ))}
     </div>
   );

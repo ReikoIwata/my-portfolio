@@ -38,14 +38,21 @@ export default function ProfileView() {
   return (
     <section className="mb-16 flex flex-col md:flex-row items-center gap-8 max-w-4xl">
       {/* 画像エリア */}
-      <div className="relative w-48 h-48 shrink-0">
-        <Image
-          // 画像URLがない場合のデフォルト画像（アバターなど）を設定
-          src={displayProfile.image_url || "https://avatar.vercel.sh/reiko.svg"}
-          alt={displayProfile.fullName}
-          fill
-          className="rounded-full object-cover border-4 border-white shadow-md"
-        />
+      <div className="relative group">
+        {/* 写真の下に敷く「強い影」の演出 */}
+        <div className="absolute inset-0 bg-black/20 translate-x-4 translate-y-4 blur-2xl rounded-sm"></div>
+
+        <div className="relative w-60 h-60 shrink-0 overflow-hidden  shadow-[20px_20px_50px_rgba(0,0,0,0.3)] transition-transform duration-500 group-hover:-translate-y-2">
+          <Image
+            src={
+              displayProfile.image_url ||
+              "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=500"
+            }
+            alt={displayProfile.fullName}
+            fill
+            className="object-cover grayscale-[10%] group-hover:grayscale-0 transition-all duration-700"
+          />
+        </div>
       </div>
 
       {/* テキストエリア */}
