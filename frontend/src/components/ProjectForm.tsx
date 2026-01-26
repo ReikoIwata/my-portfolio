@@ -75,7 +75,7 @@ export default function ProjectForm({
   const onSubmit = async (data: ProjectInput) => {
     try {
       if (editingProject) {
-        await apiRequest(`/projects${editingProject.id}`, {
+        await apiRequest(`/projects/${editingProject.id}`, {
           method: "PUT",
           body: JSON.stringify(data),
         });

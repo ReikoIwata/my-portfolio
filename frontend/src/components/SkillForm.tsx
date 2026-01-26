@@ -56,7 +56,7 @@ export default function SkillForm({
   const onSubmit = async (data: SkillInput) => {
     try {
       // 編集なら PUT /skills{id} 、新規なら POST /skills
-      const url = editingSkill ? `/skills${editingSkill.id}` : "/skills";
+      const url = editingSkill ? `/skills/${editingSkill.id}` : "/skills";
       const method = editingSkill ? "PUT" : "POST";
 
       await apiRequest(url, {
