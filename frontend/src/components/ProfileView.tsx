@@ -48,7 +48,7 @@ export default function ProfileView() {
           <Image
             src={
               displayProfile.image_url ||
-              "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=500"
+              "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy6xlfKWWn6NHtMPNU9DC10EYC9XKc7_OK0msapTZHIrmvqZLoq-z1PeXfNyXC1LHtcblqKCSmKYGRLrNHCyQAN4yWpkSJ3paF6LD_a880_fIHL7COo1mWHwmyqOZBikCnG14pBtU7Bt0m/s803/animal_kiboshi_iwa_hyrax.png"
             }
             alt={displayProfile.fullName}
             fill

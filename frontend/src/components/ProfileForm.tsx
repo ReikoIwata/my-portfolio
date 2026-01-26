@@ -154,6 +154,8 @@ export default function ProfileForm() {
             {...register("image_url")}
             placeholder="自動入力されます"
           />
+          <Input label="GitHub URL" {...register("github_url")} />
+          <Input label="Twitter URL" {...register("twitter_url")} />
         </div>
       </div>
 
