@@ -1,70 +1,57 @@
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional
 from datetime import datetime
 
-# profile関連のスキーマ
-class ProfileCreate(BaseModel):
-    fullName: str
+# --- Profile関連 ---
+class ProfileBase(BaseModel):
+    full_name: str = Field(..., alias="fullName") 
     title: str
     bio: Optional[str] = None
     image_url: Optional[str] = None
     github_url: Optional[str] = None
     twitter_url: Optional[str] = None
 
-class ProfileResponse(ProfileCreate):
+    # Pydantic v2 設定方法
+    model_config = ConfigDict(
+        populate_by_name=True, # エイリアス(fullName)と変数名(full_name)両方を許可
+        from_attributes=True   # SQLAlchemyモデルからの変換を許可
+    )
+
+class ProfileCreate(ProfileBase):
+    pass
+
+class ProfileResponse(ProfileBase):
     id: int
-    class Config:
-        from_attributes = True
 
-
-# skill関連のスキーマ
+# --- Skill関連 ---
 class SkillBase(BaseModel):
     name: str
-    category: str  # Backend, Tool
-    level: int  # 1から5の範囲でスキルレベルを表す
+    category: str
+    level: int
     icon_url: Optional[str] = None
+    
+    model_config = ConfigDict(from_attributes=True)
 
-# 作成用
 class SkillCreate(SkillBase):
     pass
 
-# 更新用
-class SkillUpdate(SkillBase):
-    pass
-
-# レスポンス用
 class SkillResponse(SkillBase):
     id: int
-    class Config:
-        from_attributes = True
 
-# project関連のスキーマ
-# 共通のフィールド
+# --- Project関連 ---
 class ProjectBase(BaseModel):
     title: str
     description: str
-    tech_stack: str  # ここを "Next.js, FastAPI" などの文字列で管理
+    tech_stack: str
     image_url: Optional[str] = None
     github_url: Optional[str] = None
     site_url: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
-# 登録時に使う（フロントから送られてくるデータ）
 class ProjectCreate(ProjectBase):
     pass
 
-# 更新時に使う（すべてのフィールドを任意にする）
-class ProjectUpdate(BaseModel):
-    title: Optional[str] = None
-    description: Optional[str] = None
-    tech_stack: Optional[str] = None
-    image_url: Optional[str] = None
-    github_url: Optional[str] = None
-    site_url: Optional[str] = None
-
-# 取得時に使う（DBから読み出すデータ）
 class Project(ProjectBase):
     id: int
     created_at: datetime
