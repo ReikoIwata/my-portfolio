@@ -114,7 +114,7 @@ export default function SkillForm({
           type="submit"
           variant="primary"
           disabled={isSubmitting}
-          className="min-w-[140px] shadow-md"
+          className="min-w-35 shadow-md"
         >
           {isSubmitting
             ? "登録中...⌛"
