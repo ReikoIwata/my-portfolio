@@ -71,13 +71,25 @@ class ProjectUpdate(BaseModel):
 class ProjectCreate(ProjectBase):
     pass
 
-
 # --- AI自動生成関連 ---
 class AITechStackInput(BaseModel):
+    title: Optional[str] = ""
     tech_stack: str
 
-class AIResponse(BaseModel):
-    suggestion: str
+# プロジェクトの最小構成（自己紹介生成用）
+class ProjectBrief(BaseModel):
+    title: str
+    tech_stack: str
+
+class AIBioRequest(BaseModel):
+    skills: List[str]
+    projects: List[ProjectBrief]
+
+class AIBioResponse(BaseModel):
+    bio: str
 
 class AISkillsOutput(BaseModel):
     skills: List[str]
+
+class AIResponse(BaseModel): 
+    suggestion: str
