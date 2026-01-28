@@ -74,7 +74,7 @@ def generate_bio_from_data(skills: List[str], projects: List[dict]) -> str:
 
     prompt = f"""
     あなたはプロの技術ライターです。以下のエンジニアの「所有スキル」と「制作実績」を基に、
-    ポートフォリオ用の魅力的な自己紹介文（bio）を200文字〜250文字程度で作成してください。
+    ポートフォリオ用の魅力的な自己紹介文（bio）を100文字〜150文字程度で作成してください。
 
     【所有スキル】
     {skill_info}

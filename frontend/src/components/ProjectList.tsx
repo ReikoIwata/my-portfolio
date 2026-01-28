@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { apiRequest } from "@/lib/api-client";
 import { Project } from "@/types";
 import toast from "react-hot-toast";
+import Button from "@/components/ui/Button";
 
 interface ProjectListProps {
   onEdit?: (project: Project) => void;
@@ -32,15 +33,44 @@ export default function ProjectList({
     fetchProjects();
   }, []);
 
-  const handleDelete = async (id: number) => {
-    if (!window.confirm("この実績を削除しますか？")) return;
-    try {
-      await apiRequest(`/projects/${id}`, { method: "DELETE" });
-      toast.success("削除しました");
-      fetchProjects();
-    } catch (error) {
-      toast.error("削除に失敗しました");
-    }
+  const handleDelete = (id: number) => {
+    toast(
+      (t) => (
+        <div className="flex flex-col items-center gap-4 p-2">
+          <p className="text-sm font-semibold text-[#3f4238]">
+            この実績を削除してもよろしいですか？
+          </p>
+          <div className="flex gap-3">
+            {/* 作成したButtonコンポーネントを使用 */}
+            <Button
+              variant="danger"
+              size="small"
+              onClick={async () => {
+                toast.dismiss(t.id);
+                const loading = toast.loading("削除中...");
+                try {
+                  await apiRequest(`/skills/${id}`, { method: "DELETE" });
+                  toast.success("削除しました✨", { id: loading });
+                  fetchProjects();
+                } catch (error) {
+                  toast.error("失敗しました", { id: loading });
+                }
+              }}
+            >
+              削除する
+            </Button>
+            <Button
+              variant="outline"
+              size="small"
+              onClick={() => toast.dismiss(t.id)}
+            >
+              キャンセル
+            </Button>
+          </div>
+        </div>
+      ),
+      { duration: 6000 },
+    );
   };
 
   if (loading) return <p className="text-center py-10">読み込み中...⌛</p>;

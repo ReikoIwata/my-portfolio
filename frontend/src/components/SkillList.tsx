@@ -5,6 +5,7 @@ import { apiRequest } from "@/lib/api-client";
 import { useAuth } from "@/context/AuthContext";
 import toast from "react-hot-toast";
 import { Skill } from "@/types";
+import Button from "@/components/ui/Button";
 interface SkillListProps {
   onEdit?: (skill: Skill) => void;
   isAdmin?: boolean; // 管理画面モードかどうか
@@ -32,15 +33,43 @@ export default function SkillList({ onEdit, isAdmin }: SkillListProps) {
 
   // 削除処理
   const handleDelete = async (id: number) => {
-    if (!window.confirm("このスキルを削除してもよろしいですか？")) return;
-
-    try {
-      await apiRequest(`/skills/${id}`, { method: "DELETE" });
-      toast.success("スキルを削除しました✨");
-      fetchSkills(); // リストを再読み込み
-    } catch (error) {
-      toast.error("削除に失敗しました。");
-    }
+    toast(
+      (t) => (
+        <div className="flex flex-col items-center gap-4 p-2">
+          <p className="text-sm font-semibold text-[#3f4238]">
+            このスキルを削除してもよろしいですか？
+          </p>
+          <div className="flex gap-3">
+            {/* 作成したButtonコンポーネントを使用 */}
+            <Button
+              variant="danger"
+              size="small"
+              onClick={async () => {
+                toast.dismiss(t.id);
+                const loading = toast.loading("削除中...");
+                try {
+                  await apiRequest(`/skills/${id}`, { method: "DELETE" });
+                  toast.success("削除しました✨", { id: loading });
+                  fetchSkills();
+                } catch (error) {
+                  toast.error("失敗しました", { id: loading });
+                }
+              }}
+            >
+              削除する
+            </Button>
+            <Button
+              variant="outline"
+              size="small"
+              onClick={() => toast.dismiss(t.id)}
+            >
+              キャンセル
+            </Button>
+          </div>
+        </div>
+      ),
+      { duration: 6000 },
+    );
   };
 
   if (loading) return <p className="text-center py-10">読み込み中...⌛</p>;
