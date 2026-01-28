@@ -2,16 +2,15 @@ import { auth } from "./firebase";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
-export const apiRequest = async (
+export const apiRequest = async <T = any>(
   endpoint: string,
   options: RequestInit = {},
-) => {
+): Promise<T> => {
   // 現在ログインしているユーザーからトークンを取得
   const user = auth.currentUser;
   let token = "";
 
   if (user) {
-    // トークンを強制リフレッシュして取得
     token = await user.getIdToken(true);
   }
 
@@ -22,8 +21,7 @@ export const apiRequest = async (
   }
   headers.set("Content-Type", "application/json");
 
-  // フェッチの実行
-  console.log("リクエスト先:", `${BASE_URL}${endpoint}`); // これを追加
+  console.log("リクエスト先:", `${BASE_URL}${endpoint}`);
 
   const response = await fetch(`${BASE_URL}${endpoint}`, {
     ...options,
@@ -35,5 +33,5 @@ export const apiRequest = async (
     throw new Error(errorData.detail || "APIリクエストに失敗しました💡");
   }
 
-  return response.json();
+  return response.json() as Promise<T>;
 };

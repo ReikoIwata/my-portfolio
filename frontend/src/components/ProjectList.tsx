@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { apiRequest } from "@/lib/api-client";
-import { Card, Button } from "@/components/ui";
 import { Project } from "@/types";
 import toast from "react-hot-toast";
+import Button from "@/components/ui/Button";
 
 interface ProjectListProps {
   onEdit?: (project: Project) => void;
@@ -20,7 +20,7 @@ export default function ProjectList({
 
   const fetchProjects = async () => {
     try {
-      const data = await apiRequest("/projects");
+      const data = await apiRequest<Project[]>("/projects");
       setProjects(data);
     } catch (error) {
       console.error("実績の取得に失敗しました:", error);
@@ -33,15 +33,44 @@ export default function ProjectList({
     fetchProjects();
   }, []);
 
-  const handleDelete = async (id: number) => {
-    if (!window.confirm("この実績を削除しますか？")) return;
-    try {
-      await apiRequest(`/projects${id}`, { method: "DELETE" });
-      toast.success("削除しました");
-      fetchProjects();
-    } catch (error) {
-      toast.error("削除に失敗しました");
-    }
+  const handleDelete = (id: number) => {
+    toast(
+      (t) => (
+        <div className="flex flex-col items-center gap-4 p-2">
+          <p className="text-sm font-semibold text-[#3f4238]">
+            この実績を削除してもよろしいですか？
+          </p>
+          <div className="flex gap-3">
+            {/* 作成したButtonコンポーネントを使用 */}
+            <Button
+              variant="danger"
+              size="small"
+              onClick={async () => {
+                toast.dismiss(t.id);
+                const loading = toast.loading("削除中...");
+                try {
+                  await apiRequest(`/projects/${id}`, { method: "DELETE" });
+                  toast.success("削除しました✨", { id: loading });
+                  fetchProjects();
+                } catch (error) {
+                  toast.error("失敗しました", { id: loading });
+                }
+              }}
+            >
+              削除する
+            </Button>
+            <Button
+              variant="outline"
+              size="small"
+              onClick={() => toast.dismiss(t.id)}
+            >
+              キャンセル
+            </Button>
+          </div>
+        </div>
+      ),
+      { duration: 6000 },
+    );
   };
 
   if (loading) return <p className="text-center py-10">読み込み中...⌛</p>;
@@ -55,7 +84,7 @@ export default function ProjectList({
               <img
                 src={project.image_url}
                 alt={project.title}
-                className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                className="w-full h-full object-cover grayscale-30 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-[#a5a58d] text-xs tracking-widest uppercase">

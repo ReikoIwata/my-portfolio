@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { apiRequest } from "@/lib/api-client";
-import { Button, Card } from "@/components/ui";
 import { useAuth } from "@/context/AuthContext";
 import toast from "react-hot-toast";
 import { Skill } from "@/types";
+import Button from "@/components/ui/Button";
 interface SkillListProps {
   onEdit?: (skill: Skill) => void;
   isAdmin?: boolean; // 管理画面モードかどうか
@@ -18,7 +18,7 @@ export default function SkillList({ onEdit, isAdmin }: SkillListProps) {
 
   const fetchSkills = async () => {
     try {
-      const data = await apiRequest("/skills");
+      const data = await apiRequest<Skill[]>("/skills");
       setSkills(data);
     } catch (error) {
       console.error("スキル取得に失敗しました💦:", error);
@@ -33,15 +33,43 @@ export default function SkillList({ onEdit, isAdmin }: SkillListProps) {
 
   // 削除処理
   const handleDelete = async (id: number) => {
-    if (!window.confirm("このスキルを削除してもよろしいですか？")) return;
-
-    try {
-      await apiRequest(`/skills/${id}`, { method: "DELETE" });
-      toast.success("スキルを削除しました✨");
-      fetchSkills(); // リストを再読み込み
-    } catch (error) {
-      toast.error("削除に失敗しました。");
-    }
+    toast(
+      (t) => (
+        <div className="flex flex-col items-center gap-4 p-2">
+          <p className="text-sm font-semibold text-[#3f4238]">
+            このスキルを削除してもよろしいですか？
+          </p>
+          <div className="flex gap-3">
+            {/* 作成したButtonコンポーネントを使用 */}
+            <Button
+              variant="danger"
+              size="small"
+              onClick={async () => {
+                toast.dismiss(t.id);
+                const loading = toast.loading("削除中...");
+                try {
+                  await apiRequest(`/skills/${id}`, { method: "DELETE" });
+                  toast.success("削除しました✨", { id: loading });
+                  fetchSkills();
+                } catch (error) {
+                  toast.error("失敗しました", { id: loading });
+                }
+              }}
+            >
+              削除する
+            </Button>
+            <Button
+              variant="outline"
+              size="small"
+              onClick={() => toast.dismiss(t.id)}
+            >
+              キャンセル
+            </Button>
+          </div>
+        </div>
+      ),
+      { duration: 6000 },
+    );
   };
 
   if (loading) return <p className="text-center py-10">読み込み中...⌛</p>;
@@ -79,18 +107,18 @@ export default function SkillList({ onEdit, isAdmin }: SkillListProps) {
           </div>
 
           {isAdmin && (
-            <div className="absolute -top-2 -right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="flex gap-3 pt-3 mt-3 border-t border-[#f5f2ed] opacity-0 group-hover:opacity-100 transition-opacity">
               <button
                 onClick={() => onEdit?.(skill)}
-                className="p-1 bg-white shadow-sm rounded-full text-[10px] text-[#6b705c] hover:bg-[#f5f2ed]"
+                className="text-[10px] uppercase tracking-tighter text-[#a5a58d] hover:text-[#6b705c]"
               >
-                EDIT
+                Edit
               </button>
               <button
                 onClick={() => handleDelete(skill.id)}
-                className="p-1 bg-white shadow-sm rounded-full text-[10px] text-rose-300 hover:bg-rose-50"
+                className="text-[10px] uppercase tracking-tighter text-rose-300 hover:text-rose-500"
               >
-                DELETE
+                Delete
               </button>
             </div>
           )}

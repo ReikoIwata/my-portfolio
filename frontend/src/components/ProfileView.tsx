@@ -12,8 +12,9 @@ export default function ProfileView() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const data = await apiRequest("/profile");
-        setProfile(Array.isArray(data) ? data[0] : data);
+        const data = await apiRequest<Profile[]>("/profile");
+        const profileData = Array.isArray(data) ? data[0] : data;
+        setProfile(profileData || null);
       } catch (error) {
         console.error("プロフィールの取得に失敗しました💦:", error);
       } finally {

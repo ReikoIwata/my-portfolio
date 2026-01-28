@@ -93,19 +93,18 @@ export default function AdminPage() {
       {/* コンテンツエリア */}
       <div className="space-y-10 animate-in fade-in slide-in-from-bottom-2 duration-700">
         {activeTab === "profile" && (
-          <div className="grid gap-10 lg:grid-cols-[1fr_400px]">
-            <div className="order-2 lg:order-1">
-              <Card title="内容を編集する">
-                <ProfileForm />
-              </Card>
-            </div>
-            <div className="order-1 lg:order-2">
-              <Card title="プレビュー">
-                <div className="p-4 bg-[#fcfaf8] rounded-xl border border-dashed border-[#e9e4db] overflow-hidden scale-[0.9] origin-top">
-                  <ProfileView />
-                </div>
-              </Card>
-            </div>
+          <div className="flex flex-col gap-10 max-w-3xl mx-auto">
+            {/* プレビューを上配置に変更 */}
+            <Card title="現在の表示プレビュー">
+              <div className="p-8 bg-[#fcfaf8] rounded-xl border border-dashed border-[#e9e4db]">
+                <ProfileView />
+              </div>
+            </Card>
+
+            {/* フォームを下配置に変更 */}
+            <Card title="内容を編集する">
+              <ProfileForm />
+            </Card>
           </div>
         )}
 
@@ -140,7 +139,8 @@ export default function AdminPage() {
         )}
 
         {activeTab === "skills" && (
-          <div className="grid gap-10 lg:grid-cols-[450px_1fr]">
+          <div className="grid gap-10">
+            {/* スキルも縦並びの方が見やすい場合は grid-cols を削除 */}
             <Card title={editingSkill ? "スキルを編集" : "スキルを登録する"}>
               <SkillForm
                 editingSkill={editingSkill}

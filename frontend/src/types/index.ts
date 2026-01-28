@@ -25,3 +25,12 @@ export interface Profile {
   githubUrl?: string;
   twitterUrl?: string;
 }
+
+// AIに送るための専用の型
+export interface AIBioInput {
+  skills: string[];
+  projects: {
+    title: string;
+    tech_stack: string;
+  }[];
+}

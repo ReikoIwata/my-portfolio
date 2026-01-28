@@ -26,31 +26,37 @@ const LEVEL_OPTIONS = [
 export default function SkillForm({
   editingSkill,
   onSuccess,
+  initialName = "", // AIで抽出した名前を外から受け取れるように追加
 }: {
   editingSkill: Skill | null;
   onSuccess: () => void;
+  initialName?: string;
 }) {
   const {
     register,
     handleSubmit,
     reset,
+    setValue, // プログラムから値を書き換えるために必要
     formState: { errors, isSubmitting },
   } = useForm<SkillInput>({
     resolver: zodResolver(skillSchema),
     defaultValues: {
-      name: "",
+      name: initialName || "",
       category: "Frontend",
       level: 3,
     },
   });
 
+  // 編集モードやAI抽出名が変わった時にフォームを更新
   useEffect(() => {
     if (editingSkill) {
       reset(editingSkill);
+    } else if (initialName) {
+      setValue("name", initialName);
     } else {
       reset({ name: "", category: "Frontend", level: 3 });
     }
-  }, [editingSkill, reset]);
+  }, [editingSkill, initialName, reset, setValue]);
 
   const onSubmit = async (data: SkillInput) => {
     try {
@@ -76,7 +82,6 @@ export default function SkillForm({
       onSubmit={handleSubmit(onSubmit)}
       className="space-y-8 bg-[#fdfbf9] p-2 rounded-xl"
     >
-      {/* スキル名： */}
       <div className="relative group">
         <Input
           label="スキル名"
@@ -87,7 +92,6 @@ export default function SkillForm({
         />
       </div>
 
-      {/* カテゴリと習熟度：*/}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Select
           label="カテゴリ"
@@ -103,18 +107,12 @@ export default function SkillForm({
         />
       </div>
 
-      {/* 登録ボタン */}
       <div className="flex justify-end items-center gap-4 pt-4 border-t border-[#ede7de]">
-        {editingSkill && (
-          <p className="text-xs text-[#a5a58d] italic">
-            editing: {editingSkill.name}
-          </p>
-        )}
         <Button
           type="submit"
           variant="primary"
           disabled={isSubmitting}
-          className="min-w-[140px] shadow-md"
+          className="min-w-35 shadow-md"
         >
           {isSubmitting
             ? "登録中...⌛"

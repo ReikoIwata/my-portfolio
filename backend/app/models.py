@@ -27,7 +27,7 @@ class Project(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)        # プロジェクト名
-    description = Column(String, nullable=False)  # 説明文
+    description = Column(Text, nullable=False)  # 説明文
     tech_stack = Column(String, nullable=False)   # 使用技術（例: "Next.js, FastAPI, MySQL"）
     image_url = Column(String, nullable=True)     # Cloudinary等の画像URL
     github_url = Column(String, nullable=True)    # ソースコードURL

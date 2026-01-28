@@ -26,6 +26,8 @@ export default function RootLayout({
         <Toaster
           position="top-center"
           toastOptions={{
+            className:
+              "font-semibold tracking-wide text-[#3f4238] rounded-full",
             style: {
               background: "#fdfbf9",
               color: "#3f4238",

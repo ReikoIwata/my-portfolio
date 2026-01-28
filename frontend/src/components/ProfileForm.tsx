@@ -7,9 +7,12 @@ import { apiRequest } from "@/lib/api-client";
 import { Input, Button } from "@/components/ui";
 import toast from "react-hot-toast";
 import { useState, useEffect } from "react";
+import { Sparkles, Loader2 } from "lucide-react";
+import { Skill, Project, AIBioInput } from "@/types";
 
 export default function ProfileForm() {
   const [isUploading, setIsUploading] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const {
     register,
@@ -24,6 +27,46 @@ export default function ProfileForm() {
 
   // 画像URLを監視
   const currentImageUrl = watch("image_url");
+
+  // AI自己紹介生成
+  const handleGenerateBio = async () => {
+    setIsGenerating(true);
+    const loadingToast = toast.loading("実績を分析して自己紹介を執筆中...");
+
+    try {
+      // スキルとプロジェクトをDBから取得
+      const [skills, projects] = await Promise.all([
+        apiRequest<Skill[]>("/skills"),
+        apiRequest<Project[]>("/projects"),
+      ]);
+
+      // AIBioInput 型に準拠したペイロードを作成
+      const payload: AIBioInput = {
+        skills: skills.map((s) => s.name),
+        projects: projects.map((p) => ({
+          title: p.title,
+          tech_stack: p.tech_stack,
+        })),
+      };
+
+      const res = await apiRequest<{ bio: string }>("/ai/generate-bio", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+
+      if (res.bio) {
+        setValue("bio", res.bio);
+        toast.success("自己紹介文を生成しました！✨", { id: loadingToast });
+      }
+    } catch (error) {
+      toast.error(
+        "生成に失敗しました。実績が登録されているか確認してください。",
+        { id: loadingToast },
+      );
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   // 初期値の取得
   useEffect(() => {
@@ -87,7 +130,6 @@ export default function ProfileForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* 左側：テキスト入力 */}
         <div className="space-y-4">
           <Input
             label="氏名"
@@ -99,13 +141,31 @@ export default function ProfileForm() {
             {...register("title")}
             error={errors.title?.message}
           />
+
+          {/* 自己紹介ラベル + AIボタン */}
           <div>
-            <label className="block text-sm font-bold mb-1 text-[#3f4238]">
-              自己紹介
-            </label>
+            <div className="flex justify-between items-center mb-1">
+              <label className="block text-sm font-bold text-[#3f4238]">
+                自己紹介
+              </label>
+              <button
+                type="button"
+                onClick={handleGenerateBio}
+                disabled={isGenerating}
+                className="flex items-center gap-1 text-[10px] font-bold text-sky-600 hover:text-sky-800 disabled:text-gray-400 transition-colors uppercase tracking-wider"
+              >
+                {isGenerating ? (
+                  <Loader2 className="w-3 h-3 animate-spin" />
+                ) : (
+                  <Sparkles className="w-3 h-3" />
+                )}
+                実績からAI生成
+              </button>
+            </div>
             <textarea
               {...register("bio")}
-              className="w-full p-2 border border-[#e9e4db] rounded-md h-32 focus:ring-1 focus:ring-[#cb997e] outline-none transition-all"
+              className="w-full p-3 border border-[#e9e4db] rounded-md h-40 focus:ring-1 focus:ring-[#cb997e] outline-none transition-all text-sm leading-relaxed"
+              placeholder="AIボタンでこれまでの実績に基づいた自己紹介を生成できます"
             />
             {errors.bio && (
               <p className="text-red-500 text-xs mt-1">{errors.bio.message}</p>
