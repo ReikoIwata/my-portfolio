@@ -49,7 +49,7 @@ export default function ProjectList({
                 toast.dismiss(t.id);
                 const loading = toast.loading("削除中...");
                 try {
-                  await apiRequest(`/skills/${id}`, { method: "DELETE" });
+                  await apiRequest(`/projects/${id}`, { method: "DELETE" });
                   toast.success("削除しました✨", { id: loading });
                   fetchProjects();
                 } catch (error) {
