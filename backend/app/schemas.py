@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field, ConfigDict
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
 
 # --- Profile関連 ---
@@ -70,3 +70,14 @@ class ProjectUpdate(BaseModel):
 
 class ProjectCreate(ProjectBase):
     pass
+
+
+# --- AI自動生成関連 ---
+class AITechStackInput(BaseModel):
+    tech_stack: str
+
+class AIResponse(BaseModel):
+    suggestion: str
+
+class AISkillsOutput(BaseModel):
+    skills: List[str]

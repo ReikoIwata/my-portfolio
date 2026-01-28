@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .database import engine, Base
-from .routers import profile, skills, projects
+from .routers import profile, skills, projects, ai
 
 # 起動時にDBテーブルを自動生成
 Base.metadata.create_all(bind=engine)
@@ -27,6 +27,7 @@ app.add_middleware(
 app.include_router(skills.router)
 app.include_router(profile.router)
 app.include_router(projects.router)
+app.include_router(ai.router)
 
 @app.get("/")
 def read_root():

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { apiRequest } from "@/lib/api-client";
-import { Card, Button } from "@/components/ui";
 import { Project } from "@/types";
 import toast from "react-hot-toast";
 
@@ -20,7 +19,7 @@ export default function ProjectList({
 
   const fetchProjects = async () => {
     try {
-      const data = await apiRequest("/projects");
+      const data = await apiRequest<Project[]>("/projects");
       setProjects(data);
     } catch (error) {
       console.error("実績の取得に失敗しました:", error);
@@ -36,7 +35,7 @@ export default function ProjectList({
   const handleDelete = async (id: number) => {
     if (!window.confirm("この実績を削除しますか？")) return;
     try {
-      await apiRequest(`/projects${id}`, { method: "DELETE" });
+      await apiRequest(`/projects/${id}`, { method: "DELETE" });
       toast.success("削除しました");
       fetchProjects();
     } catch (error) {
@@ -55,7 +54,7 @@ export default function ProjectList({
               <img
                 src={project.image_url}
                 alt={project.title}
-                className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                className="w-full h-full object-cover grayscale-30 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-[#a5a58d] text-xs tracking-widest uppercase">

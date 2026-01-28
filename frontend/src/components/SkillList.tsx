@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { apiRequest } from "@/lib/api-client";
-import { Button, Card } from "@/components/ui";
 import { useAuth } from "@/context/AuthContext";
 import toast from "react-hot-toast";
 import { Skill } from "@/types";
@@ -18,7 +17,7 @@ export default function SkillList({ onEdit, isAdmin }: SkillListProps) {
 
   const fetchSkills = async () => {
     try {
-      const data = await apiRequest("/skills");
+      const data = await apiRequest<Skill[]>("/skills");
       setSkills(data);
     } catch (error) {
       console.error("スキル取得に失敗しました💦:", error);
@@ -79,18 +78,18 @@ export default function SkillList({ onEdit, isAdmin }: SkillListProps) {
           </div>
 
           {isAdmin && (
-            <div className="absolute -top-2 -right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="flex gap-3 pt-3 mt-3 border-t border-[#f5f2ed] opacity-0 group-hover:opacity-100 transition-opacity">
               <button
                 onClick={() => onEdit?.(skill)}
-                className="p-1 bg-white shadow-sm rounded-full text-[10px] text-[#6b705c] hover:bg-[#f5f2ed]"
+                className="text-[10px] uppercase tracking-tighter text-[#a5a58d] hover:text-[#6b705c]"
               >
-                EDIT
+                Edit
               </button>
               <button
                 onClick={() => handleDelete(skill.id)}
-                className="p-1 bg-white shadow-sm rounded-full text-[10px] text-rose-300 hover:bg-rose-50"
+                className="text-[10px] uppercase tracking-tighter text-rose-300 hover:text-rose-500"
               >
-                DELETE
+                Delete
               </button>
             </div>
           )}
