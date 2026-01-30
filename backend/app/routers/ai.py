@@ -3,7 +3,6 @@ from ..services import ai_service
 from .. import schemas
 
 router = APIRouter(
-    prefix="/ai",
     tags=["ai"]
 )
 
