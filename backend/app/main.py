@@ -13,7 +13,7 @@ origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "https://my-portfolio-pi-pink-18.vercel.app",
-    "https://my-portfolio-pi-pink-18.vercel.app/"
+    "https://my-portfolio-pi-pink-18.vercel.app/",
 ]
 
 app.add_middleware(
