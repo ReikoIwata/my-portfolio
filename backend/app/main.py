@@ -14,6 +14,8 @@ origins = [
     "http://127.0.0.1:3000",
     "https://my-portfolio-pi-pink-18.vercel.app",
     "https://my-portfolio-pi-pink-18.vercel.app/",
+    "https://my-portfolio-bhc5.onrender.com",
+    "https://my-portfolio-bhc5.onrender.com/",
 ]
 
 app.add_middleware(

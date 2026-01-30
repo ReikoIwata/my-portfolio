@@ -5,7 +5,6 @@ from .. import models, schemas
 from ..auth import get_current_user
 
 router = APIRouter(
-    prefix="/profile",
     tags=["profile"]
 )
 
