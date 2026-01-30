@@ -18,7 +18,7 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"], # 全てのドメインを許可（テスト用）
     allow_credentials=True,
     allow_methods=["*"], 
     allow_headers=["*"], 
